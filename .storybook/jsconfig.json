@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/app/*": [
+        "../src/app/*"
+      ],
+      "@/public/*": [
+        "../public/*"
+      ],
+      "@/common/*": [
+        "../src/common/*"
+      ],
+      "@/components/*": [
+        "../src/common/components/*"
+      ],
+      "@/utils/*": [
+        "../src/common/utils/*"
+      ],
+      "@/layouts/*": [
+        "../src/layouts/*"
+      ],
+      "@/modules/*": [
+        "../src/modules/*"
+      ],
+      "@/pages/*": [
+        "../src/pages/*"
+      ]
+    }
+  }
+}

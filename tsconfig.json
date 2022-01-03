@@ -1,0 +1,79 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/app/*": [
+        "src/app/*"
+      ],
+      "@/public/*": [
+        "public/*"
+      ],
+      "@/common/*": [
+        "src/common/*"
+      ],
+      "@/components/*": [
+        "src/common/components/*"
+      ],
+      "@/utils/*": [
+        "src/common/utils/*"
+      ],
+      "@/layouts/*": [
+        "src/layouts/*"
+      ],
+      "@/modules/*": [
+        "src/modules/*"
+      ],
+      "@/pages/*": [
+        "src/pages/*"
+      ]
+    },
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": true,
+    "target": "ES6",
+    "incremental": true
+  },
+  "exclude": [
+    ".github",
+    ".next",
+    "_site",
+    "coverage",
+    "cypress",
+    "node_modules",
+    "public"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "next.config.js",
+    "jest.config.js",
+    "./sentry.client.config.js",
+    "./sentry.server.config.js",
+    "./src/modules/core/i18n.config.js",
+    "./next-i18next.config.js",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}
