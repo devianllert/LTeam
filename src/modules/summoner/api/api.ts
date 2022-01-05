@@ -30,7 +30,7 @@ export interface SummonerLeagueStatsData {
 const fetchSummonerData = async (summonerName: string, region?: string): Promise<SummonerData> => {
   const fetchData = await fetch(`https://${region ?? 'euw1'}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}`, {
     headers: {
-      'X-Riot-Token': 'RGAPI-df199f46-917d-4496-9450-cf961690c381',
+      'X-Riot-Token': process.env.RIOT_API_KEY as string,
     },
   });
 
