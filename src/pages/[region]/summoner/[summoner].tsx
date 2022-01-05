@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import Head from 'next/head';
 import { RiSearchLine } from 'react-icons/ri';
 
-import { summonerRequest, SummonerLegueStatsData } from '@/modules/summoner/api';
+import { SummonerLeagueStatsData } from '@/modules/summoner/api';
 
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
 import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
@@ -22,6 +22,9 @@ import { InputAdornment } from '@/common/components/system/Input/InputAdornment'
 import { Input } from '@/common/components/system/Input';
 import { getTranslationsStaticProps } from '@/layouts/core/SSG';
 import * as Text from '@/common/components/system/Text';
+import { getCoreServerSideProps } from '@/layouts/core/SSR';
+import { getTranslationsConfig } from '@/layouts/core/translations';
+import serializeSafe from '@/modules/core/serializeSafe/serializeSafe';
 
 const logger = createLogger('Index');
 
@@ -40,14 +43,17 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
 
   const router = useRouter();
 
-  const [summoner, setSummoner] = React.useState('');
+  const { region, summoner } = router.query;
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (!summoner.trim()) return;
+  const query = useQuery(['summoner', summoner], async () => {
+    const data = await fetch(`/api/summoner/${summoner as string}`);
+    const fetchedSummonerData = await data.json() as SummonerLeagueStatsData;
 
-    await router.push(`/euw/summoner/${summoner}`);
-  };
+    return fetchedSummonerData;
+  });
+
+  console.log(region, summoner);
+  console.log(query.data?.data);
 
   return (
     <>
@@ -77,12 +83,11 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
           maxWidth="440px"
           width="100%"
           mt={8}
-          onSubmit={onSubmit}
         >
           <Input
             suffix={(
               <InputAdornment position="end">
-                <IconButton size="small" edge="end" onClick={onSubmit}>
+                <IconButton size="small" edge="end">
                   <RiSearchLine />
                 </IconButton>
               </InputAdornment>
@@ -91,7 +96,6 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
             fullWidth
             placeholder="Search summoner"
             value={summoner}
-            onChange={(event) => setSummoner(event.currentTarget.value)}
           />
         </Box>
       </Box>
@@ -99,7 +103,16 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
   );
 };
 
-export const getStaticProps = getTranslationsStaticProps(['common', 'index']);
+export const getServerSideProps = async (context) => {
+  return {
+    props: {
+      isReadyToRender: true,
+      isServerRendering: true,
+      ...await getTranslationsConfig(context, ['common', 'index']),
+      serializedDataset: serializeSafe({}),
+    },
+  };
+};
 
 IndexPage.Layout = MainLayout;
 
