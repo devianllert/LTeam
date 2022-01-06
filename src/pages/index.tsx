@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import Head from 'next/head';
 import { RiSearchLine } from 'react-icons/ri';
 
-import { summonerRequest, SummonerLegueStatsData } from '@/modules/summoner/api';
+import { summonerRequest, SummonerLeagueStatsData } from '@/modules/summoner/api';
 
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
 import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
@@ -25,6 +25,53 @@ import * as Text from '@/common/components/system/Text';
 
 const logger = createLogger('Index');
 
+const regions = [
+  {
+    region: 'br1',
+    value: 'br',
+  },
+  {
+    region: 'eun1',
+    value: 'eun',
+  },
+  {
+    region: 'euw1',
+    value: 'euw',
+  },
+  {
+    region: 'jp1',
+    value: 'jp',
+  },
+  {
+    region: 'kr',
+    value: 'kr',
+  },
+  {
+    region: 'la1',
+    value: 'lan',
+  },
+  {
+    region: 'la2',
+    value: 'las',
+  },
+  {
+    region: 'na1',
+    value: 'na',
+  },
+  {
+    region: 'oc1',
+    value: 'oce',
+  },
+  {
+    region: 'ru',
+    value: 'ru',
+  },
+  {
+    region: 'tr1',
+    value: 'tr',
+  },
+];
+
 /**
  * SSR pages are first rendered by the server
  * Then, they're rendered by the client, and gain additional props (defined in OnlyBrowserPageProps)
@@ -41,12 +88,13 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
   const router = useRouter();
 
   const [summoner, setSummoner] = React.useState('');
+  const [region, setRegion] = React.useState('euw1');
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!summoner.trim()) return;
 
-    await router.push(`/euw/summoner/${summoner}`);
+    await router.push(`/${region}/summoner/${summoner}`);
   };
 
   return (
@@ -82,6 +130,17 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
           <Input
             suffix={(
               <InputAdornment position="end">
+                <select
+                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setRegion(event.currentTarget.value)}
+                  value={region}
+                >
+                  {regions.map((data) => {
+                    return (
+                      <option value={data.region} key={data.region}>{data.value}</option>
+                    );
+                  })}
+                </select>
+
                 <IconButton size="small" edge="end" onClick={onSubmit}>
                   <RiSearchLine />
                 </IconButton>

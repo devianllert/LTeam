@@ -5,4 +5,5 @@ export const MainLayoutContainer = styled.div({
   flexDirection: 'column',
   width: '100%',
   minHeight: '100vh',
+  position: 'relative',
 });

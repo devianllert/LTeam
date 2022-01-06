@@ -45,8 +45,8 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
 
   const { region, summoner } = router.query;
 
-  const query = useQuery(['summoner', summoner], async () => {
-    const data = await fetch(`/api/summoner/${summoner as string}`);
+  const query = useQuery(['summoner', region, summoner], async () => {
+    const data = await fetch(`/api/${region as string}/summoner/${summoner as string}`);
     const fetchedSummonerData = await data.json() as SummonerLeagueStatsData;
 
     return fetchedSummonerData;

@@ -27,8 +27,8 @@ export interface SummonerLeagueStatsData {
   data: LeagueData[];
 }
 
-const fetchSummonerData = async (summonerName: string, region?: string): Promise<SummonerData> => {
-  const fetchData = await fetch(`https://${region ?? 'euw1'}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}`, {
+const fetchSummonerData = async (region: string, summonerName: string): Promise<SummonerData> => {
+  const fetchData = await fetch(`https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}`, {
     headers: {
       'X-Riot-Token': process.env.RIOT_API_KEY as string,
     },
@@ -39,8 +39,8 @@ const fetchSummonerData = async (summonerName: string, region?: string): Promise
   return data;
 };
 
-const fetchSummonerLegueStats = async (summonerId: string, region?: string): Promise<SummonerLeagueStatsData> => {
-  const fetchData = await fetch(`https://${region ?? 'euw1'}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}`, {
+const fetchSummonerLegueStats = async (region: string, summonerId: string): Promise<SummonerLeagueStatsData> => {
+  const fetchData = await fetch(`https://${region}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}`, {
     headers: {
       'X-Riot-Token': process.env.RIOT_API_KEY as string,
     },
@@ -53,9 +53,9 @@ const fetchSummonerLegueStats = async (summonerId: string, region?: string): Pro
   };
 };
 
-export const summonerRequest = async (summonerName: string, region?: string): Promise<SummonerLeagueStatsData> => {
-  const summonerData = await fetchSummonerData(summonerName);
-  const summonerLeagueData = await fetchSummonerLegueStats(summonerData.id);
+export const summonerRequest = async (region: string, summonerName: string): Promise<SummonerLeagueStatsData> => {
+  const summonerData = await fetchSummonerData(region, summonerName);
+  const summonerLeagueData = await fetchSummonerLegueStats(region, summonerData.id);
 
   return summonerLeagueData;
 };
