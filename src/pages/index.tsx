@@ -6,7 +6,12 @@ import { useQuery } from 'react-query';
 import Head from 'next/head';
 import { RiSearchLine } from 'react-icons/ri';
 
+import Link from 'next/link';
 import { summonerRequest, SummonerLeagueStatsData } from '@/modules/summoner/api';
+
+import { regions } from '@/modules/summoner/constants/regions';
+
+import { Summoner, readFromLocalStorage } from '@/modules/summoner/utilits/storage';
 
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
 import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
@@ -25,53 +30,6 @@ import * as Text from '@/common/components/system/Text';
 
 const logger = createLogger('Index');
 
-const regions = [
-  {
-    region: 'br1',
-    value: 'br',
-  },
-  {
-    region: 'eun1',
-    value: 'eun',
-  },
-  {
-    region: 'euw1',
-    value: 'euw',
-  },
-  {
-    region: 'jp1',
-    value: 'jp',
-  },
-  {
-    region: 'kr',
-    value: 'kr',
-  },
-  {
-    region: 'la1',
-    value: 'lan',
-  },
-  {
-    region: 'la2',
-    value: 'las',
-  },
-  {
-    region: 'na1',
-    value: 'na',
-  },
-  {
-    region: 'oc1',
-    value: 'oce',
-  },
-  {
-    region: 'ru',
-    value: 'ru',
-  },
-  {
-    region: 'tr1',
-    value: 'tr',
-  },
-];
-
 /**
  * SSR pages are first rendered by the server
  * Then, they're rendered by the client, and gain additional props (defined in OnlyBrowserPageProps)
@@ -88,6 +46,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
   const router = useRouter();
 
   const [summoner, setSummoner] = React.useState('');
+  const [searchedSummoners, setSearchedSummoners] = React.useState(readFromLocalStorage('ResentlySearchedSummoners') as Summoner[] ?? []);
   const [region, setRegion] = React.useState('euw1');
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
@@ -126,6 +85,8 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
           width="100%"
           mt={8}
           onSubmit={onSubmit}
+          display="flex"
+          flexDirection="column"
         >
           <Input
             suffix={(
@@ -152,6 +113,24 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
             value={summoner}
             onChange={(event) => setSummoner(event.currentTarget.value)}
           />
+          <ol>
+            {searchedSummoners.map((data) => {
+              return (
+                <li
+                  key={data.summonerId}
+                >
+                  <Link href={`/${data.summonerRegion.region}/summoner/${data.summonerName}`}>
+                    <Box
+                      display="flex"
+                    >
+                      <Text.Paragraph>{data.summonerRegion.value}</Text.Paragraph>
+                      <Text.Paragraph>{data.summonerName}</Text.Paragraph>
+                    </Box>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
         </Box>
       </Box>
     </>

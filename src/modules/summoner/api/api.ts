@@ -27,6 +27,11 @@ export interface SummonerLeagueStatsData {
   data: LeagueData[];
 }
 
+export interface SummonerResponse {
+  summonerData: SummonerData;
+  leagueData: SummonerLeagueStatsData;
+}
+
 const fetchSummonerData = async (region: string, summonerName: string): Promise<SummonerData> => {
   const fetchData = await fetch(`https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}`, {
     headers: {
@@ -53,9 +58,12 @@ const fetchSummonerLegueStats = async (region: string, summonerId: string): Prom
   };
 };
 
-export const summonerRequest = async (region: string, summonerName: string): Promise<SummonerLeagueStatsData> => {
+export const summonerRequest = async (region: string, summonerName: string): Promise<SummonerResponse> => {
   const summonerData = await fetchSummonerData(region, summonerName);
   const summonerLeagueData = await fetchSummonerLegueStats(region, summonerData.id);
 
-  return summonerLeagueData;
+  return {
+    summonerData,
+    leagueData: summonerLeagueData,
+  };
 };

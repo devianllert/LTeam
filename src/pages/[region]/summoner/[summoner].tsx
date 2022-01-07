@@ -6,7 +6,12 @@ import { useQuery } from 'react-query';
 import Head from 'next/head';
 import { RiSearchLine } from 'react-icons/ri';
 
-import { SummonerLeagueStatsData } from '@/modules/summoner/api';
+import { SummonerResponse } from '@/modules/summoner/api';
+
+import { regions } from '@/modules/summoner/constants/regions';
+import { getRegion } from '@/modules/summoner/utilits/region';
+
+import { Summoner, saveSummonerToLocalStorage } from '@/modules/summoner/utilits/storage';
 
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
 import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
@@ -47,13 +52,20 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
 
   const query = useQuery(['summoner', region, summoner], async () => {
     const data = await fetch(`/api/${region as string}/summoner/${summoner as string}`);
-    const fetchedSummonerData = await data.json() as SummonerLeagueStatsData;
+    const fetchedSummonerData = await data.json() as SummonerResponse;
 
     return fetchedSummonerData;
   });
 
   console.log(region, summoner);
-  console.log(query.data?.data);
+  console.log(query.data?.leagueData);
+  const searchedSummoner: Summoner = {
+    summonerName: summoner as string,
+    summonerRegion: getRegion(region as string),
+    summonerIcon: query.data?.summonerData.profileIconId ?? 0,
+    summonerId: query.data?.summonerData.id ?? '',
+  };
+  saveSummonerToLocalStorage('ResentlySearchedSummoners', searchedSummoner);
 
   return (
     <>
