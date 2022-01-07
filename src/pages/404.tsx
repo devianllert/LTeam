@@ -4,6 +4,7 @@ import Link from 'next/link';
 import * as Sentry from '@sentry/nextjs';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { RiArrowRightLine } from 'react-icons/ri';
 
 import { createLogger } from '@/modules/core/logging/logger';
 import { getAppTitle } from '@/modules/core/meta/meta';
@@ -14,6 +15,7 @@ import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
 import { NotFound404Layout } from '@/layouts/404/components/NotFound404Layout';
 import * as Text from '@/common/components/system/Text';
 import { Button } from '@/common/components/system/Button';
+import { Stack } from '@/common/components/system/Stack';
 
 const fileLabel = 'pages/404';
 const logger = createLogger(fileLabel);
@@ -36,18 +38,8 @@ export const getStaticProps: GetStaticProps<SSGPageProps> = getTranslationsStati
  *
  * Beware props in OnlyBrowserPageProps are not available on the server
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {} & SoftPageProps;
+type Props = SoftPageProps;
 
-/**
- * Doesn't use "getStaticPaths" because it's not supported by Next.js "getStaticPaths can only be used with dynamic pages, not '/404'."
- *
- * XXX The "locale" cannot be resolved properly using SSG on 404 pages, because this file doesn't belong to the "/[locale]" folder and thus doesn't benefit from url rewriting
- *  Therefore, the page will be displayed based on the DEFAULT_LOCALE value and not on the actual end-user locale
- *
- * @param props
- * @see https://nextjs.org/docs/advanced-features/custom-error-page#404-page
- */
 const NotFound404Page: EnhancedNextPage<Props> = (): JSX.Element => {
   const router = useRouter();
 
@@ -68,11 +60,22 @@ const NotFound404Page: EnhancedNextPage<Props> = (): JSX.Element => {
         <title>{getAppTitle('404')}</title>
       </Head>
 
-      <Text.Heading variant="h1">{t('title')}</Text.Heading>
-      <Text.Paragraph variant="body1">{t('description')}</Text.Paragraph>
-      <Link href="/" passHref>
-        <Button>{t('button')}</Button>
-      </Link>
+      <Stack direction="column" space={3}>
+        <Text.Paragraph variant="body1" color="text.secondary">{t('subtitle')}</Text.Paragraph>
+
+        <Text.Heading component="h1" variant="h4">{t('title')}</Text.Heading>
+
+        <Text.Paragraph variant="body2" color="text.secondary">{t('description')}</Text.Paragraph>
+
+        <Link href="/" passHref>
+          <Button
+            variant="contained"
+            endIcon={<RiArrowRightLine />}
+          >
+            {t('button')}
+          </Button>
+        </Link>
+      </Stack>
     </>
   );
 };

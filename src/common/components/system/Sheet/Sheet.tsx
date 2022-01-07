@@ -13,4 +13,5 @@ export const Sheet = ({ children, ...props }: DialogPrimitive.DialogProps) => (
 export const SheetTrigger = DialogPrimitive.Trigger;
 export const SheetClose = DialogPrimitive.Close;
 export const SheetTitle = DialogPrimitive.Title;
+export const SheetPortal = DialogPrimitive.Portal;
 export const SheetDescription = DialogPrimitive.Description;
