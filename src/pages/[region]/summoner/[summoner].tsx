@@ -57,15 +57,16 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
     return fetchedSummonerData;
   });
 
-  console.log(region, summoner);
-  console.log(query.data?.leagueData);
   const searchedSummoner: Summoner = {
     summonerName: summoner as string,
     summonerRegion: getRegion(region as string),
     summonerIcon: query.data?.summonerData.profileIconId ?? 0,
     summonerId: query.data?.summonerData.id ?? '',
   };
-  saveSummonerToLocalStorage('ResentlySearchedSummoners', searchedSummoner);
+
+  React.useEffect(() => {
+    saveSummonerToLocalStorage('ResentlySearchedSummoners', searchedSummoner);
+  }, []);
 
   return (
     <>
