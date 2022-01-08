@@ -1,46 +1,46 @@
-export const regions = [
-  {
-    region: 'br1',
+export const regions = {
+  br: {
     value: 'br',
+    key: 'br1',
   },
-  {
-    region: 'eun1',
+  eun: {
     value: 'eun',
+    key: 'eun1',
   },
-  {
-    region: 'euw1',
+  euw: {
     value: 'euw',
+    key: 'euw1',
   },
-  {
-    region: 'jp1',
+  jp: {
     value: 'jp',
+    key: 'jp1',
   },
-  {
-    region: 'kr',
+  kr: {
     value: 'kr',
+    key: 'kr',
   },
-  {
-    region: 'la1',
+  lan: {
     value: 'lan',
+    key: 'la1',
   },
-  {
-    region: 'la2',
+  las: {
     value: 'las',
+    key: 'la2',
   },
-  {
-    region: 'na1',
+  na: {
     value: 'na',
+    key: 'na1',
   },
-  {
-    region: 'oc1',
+  oce: {
     value: 'oce',
+    key: 'oc1',
   },
-  {
-    region: 'ru',
+  ru: {
     value: 'ru',
+    key: 'ru',
   },
-  {
-    region: 'tr1',
+  tr: {
     value: 'tr',
+    key: 'tr1',
   },
-];
+} as const;

@@ -2,16 +2,12 @@ import * as React from 'react';
 
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
 import Head from 'next/head';
 import { RiSearchLine } from 'react-icons/ri';
 
 import Link from 'next/link';
-import { summonerRequest, SummonerLeagueStatsData } from '@/modules/summoner/api';
 
 import { regions } from '@/modules/summoner/constants/regions';
-
-import { Summoner, readFromLocalStorage } from '@/modules/summoner/utilits/storage';
 
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
 import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
@@ -27,6 +23,9 @@ import { InputAdornment } from '@/common/components/system/Input/InputAdornment'
 import { Input } from '@/common/components/system/Input';
 import { getTranslationsStaticProps } from '@/layouts/core/SSG';
 import * as Text from '@/common/components/system/Text';
+import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners';
+import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
+import { DisplayOnBrowserMount } from '@/common/components/rehydration/DisplayOnBrowserMount';
 
 const logger = createLogger('Index');
 
@@ -46,11 +45,13 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
   const router = useRouter();
 
   const [summoner, setSummoner] = React.useState('');
-  const [searchedSummoners, setSearchedSummoners] = React.useState(readFromLocalStorage('ResentlySearchedSummoners') as Summoner[] ?? []);
-  const [region, setRegion] = React.useState('euw1');
+  const [region, setRegion] = React.useState<RegionAlias>('euw');
+
+  const [recentSummoners] = useRecentSummoners();
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+
     if (!summoner.trim()) return;
 
     await router.push(`/${region}/summoner/${summoner}`);
@@ -92,12 +93,12 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
             suffix={(
               <InputAdornment position="end">
                 <select
-                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setRegion(event.currentTarget.value)}
+                  onChange={(event) => setRegion(event.currentTarget.value as RegionAlias)}
                   value={region}
                 >
-                  {regions.map((data) => {
+                  {Object.keys(regions).map((key) => {
                     return (
-                      <option value={data.region} key={data.region}>{data.value}</option>
+                      <option value={regions[key].value} key={key}>{regions[key].value}</option>
                     );
                   })}
                 </select>
@@ -113,24 +114,28 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
             value={summoner}
             onChange={(event) => setSummoner(event.currentTarget.value)}
           />
-          <ol>
-            {searchedSummoners.map((data) => {
-              return (
-                <li
-                  key={data.summonerId}
-                >
-                  <Link href={`/${data.summonerRegion.region}/summoner/${data.summonerName}`}>
-                    <Box
-                      display="flex"
-                    >
-                      <Text.Paragraph>{data.summonerRegion.value}</Text.Paragraph>
-                      <Text.Paragraph>{data.summonerName}</Text.Paragraph>
-                    </Box>
-                  </Link>
-                </li>
-              );
-            })}
-          </ol>
+
+          <DisplayOnBrowserMount>
+            <ol>
+              {recentSummoners.map((data) => {
+                return (
+                  <li
+                    key={data.id}
+                  >
+                    <Link href={`/${data.region}/summoner/${data.name}`} passHref>
+                      <Box
+                        display="flex"
+                        component="a"
+                      >
+                        <Text.Paragraph>{data.region}</Text.Paragraph>
+                        <Text.Paragraph>{data.name}</Text.Paragraph>
+                      </Box>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ol>
+          </DisplayOnBrowserMount>
         </Box>
       </Box>
     </>

@@ -1,12 +1,13 @@
 import { NextApiHandler, NextApiResponse, NextApiRequest } from 'next';
 
-import { summonerRequest, SummonerLeagueStatsData } from '@/modules/summoner/api';
+import { summonerRequest, SummonerResponse } from '@/modules/summoner/api';
+import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 
-const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse<SummonerLeagueStatsData | undefined>) => {
+const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse<SummonerResponse | undefined>) => {
   const { region, summoner } = req.query;
-  const coin = await summonerRequest(region as string, summoner as string);
+  const data = await summonerRequest(region as RegionAlias, summoner as string);
 
-  res.status(200).json(coin);
+  res.status(200).json(data);
 };
 
 export default handler;

@@ -31,7 +31,7 @@ export const MainHeader = (): JSX.Element => {
       <Container>
         <S.MainHeaderRoot>
           <Link href="/" passHref>
-            <Text.Heading variant="h6" component="a">{APP_TITLE}</Text.Heading>
+            <Text.Heading variant="h6" component="a" color="white">{APP_TITLE}</Text.Heading>
           </Link>
           <DisplayOnBrowserMount>
             <Stack alignItems="center" space={3}>

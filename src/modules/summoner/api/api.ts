@@ -1,3 +1,7 @@
+import axios from 'axios';
+import { RegionAlias } from '../interfaces/region.interface';
+import { getRegionFromAlias } from '../utils/region';
+
 interface SummonerData {
   id: string;
   profileIconId: number;
@@ -32,35 +36,31 @@ export interface SummonerResponse {
   leagueData: SummonerLeagueStatsData;
 }
 
-const fetchSummonerData = async (region: string, summonerName: string): Promise<SummonerData> => {
-  const fetchData = await fetch(`https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}`, {
-    headers: {
-      'X-Riot-Token': process.env.RIOT_API_KEY as string,
-    },
-  });
+const riotApi = axios.create({
+  headers: {
+    'X-Riot-Token': process.env.RIOT_API_KEY as string,
+  },
+});
 
-  const data = await fetchData.json() as SummonerData;
+const fetchSummonerData = async (region: string, summonerName: string): Promise<SummonerData> => {
+  const { data } = await riotApi.get<SummonerData>(`https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}`);
 
   return data;
 };
 
 const fetchSummonerLegueStats = async (region: string, summonerId: string): Promise<SummonerLeagueStatsData> => {
-  const fetchData = await fetch(`https://${region}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}`, {
-    headers: {
-      'X-Riot-Token': process.env.RIOT_API_KEY as string,
-    },
-  });
-
-  const data = await fetchData.json() as LeagueData[];
+  const { data } = await riotApi.get<LeagueData[]>(`https://${region}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}`);
 
   return {
     data,
   };
 };
 
-export const summonerRequest = async (region: string, summonerName: string): Promise<SummonerResponse> => {
-  const summonerData = await fetchSummonerData(region, summonerName);
-  const summonerLeagueData = await fetchSummonerLegueStats(region, summonerData.id);
+export const summonerRequest = async (region: RegionAlias, summonerName: string): Promise<SummonerResponse> => {
+  const regionKey = getRegionFromAlias(region).key;
+
+  const summonerData = await fetchSummonerData(regionKey, summonerName);
+  const summonerLeagueData = await fetchSummonerLegueStats(regionKey, summonerData.id);
 
   return {
     summonerData,
