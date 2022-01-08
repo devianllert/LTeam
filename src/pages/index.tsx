@@ -27,6 +27,8 @@ import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners'
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import { DisplayOnBrowserMount } from '@/common/components/rehydration/DisplayOnBrowserMount';
 
+import { LocalStorageSummoners } from '@/modules/summoner/components/LocalStorageSummoners';
+
 const logger = createLogger('Index');
 
 /**
@@ -115,7 +117,9 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
             onChange={(event) => setSummoner(event.currentTarget.value)}
           />
 
-          <DisplayOnBrowserMount>
+          <LocalStorageSummoners />
+
+          {/* <DisplayOnBrowserMount>
             <ol>
               {recentSummoners.map((data) => {
                 return (
@@ -135,7 +139,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
                 );
               })}
             </ol>
-          </DisplayOnBrowserMount>
+          </DisplayOnBrowserMount> */}
         </Box>
       </Box>
     </>
