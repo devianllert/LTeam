@@ -5,8 +5,6 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { RiSearchLine } from 'react-icons/ri';
 
-import Link from 'next/link';
-
 import { regions } from '@/modules/summoner/constants/regions';
 
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
@@ -23,9 +21,7 @@ import { InputAdornment } from '@/common/components/system/Input/InputAdornment'
 import { Input } from '@/common/components/system/Input';
 import { getTranslationsStaticProps } from '@/layouts/core/SSG';
 import * as Text from '@/common/components/system/Text';
-import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
-import { DisplayOnBrowserMount } from '@/common/components/rehydration/DisplayOnBrowserMount';
 
 import { LocalStorageSummoners } from '@/modules/summoner/components/LocalStorageSummoners';
 
@@ -48,8 +44,6 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
 
   const [summoner, setSummoner] = React.useState('');
   const [region, setRegion] = React.useState<RegionAlias>('euw');
-
-  const [recentSummoners] = useRecentSummoners();
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -118,28 +112,6 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
           />
 
           <LocalStorageSummoners />
-
-          {/* <DisplayOnBrowserMount>
-            <ol>
-              {recentSummoners.map((data) => {
-                return (
-                  <li
-                    key={data.id}
-                  >
-                    <Link href={`/${data.region}/summoner/${data.name}`} passHref>
-                      <Box
-                        display="flex"
-                        component="a"
-                      >
-                        <Text.Paragraph>{data.region}</Text.Paragraph>
-                        <Text.Paragraph>{data.name}</Text.Paragraph>
-                      </Box>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ol>
-          </DisplayOnBrowserMount> */}
         </Box>
       </Box>
     </>
