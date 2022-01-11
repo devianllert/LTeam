@@ -20,5 +20,10 @@ export const useRecentSummoners = () => {
     ]);
   }, [summoners, setSummoners]);
 
-  return [summoners, addSummoner] as const;
+  const deleteSummoner = React.useCallback((deletedSummoner: RecentSummoner) => {
+    const filtredRecentSummoners = summoners.filter((summoner) => summoner.id !== deletedSummoner.id);
+    setSummoners(filtredRecentSummoners);
+  }, [summoners, setSummoners]);
+
+  return [summoners, addSummoner, deleteSummoner] as const;
 };
