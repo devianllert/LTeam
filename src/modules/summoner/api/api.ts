@@ -38,7 +38,7 @@ export interface SummonerResponse {
 
 const riotApi = axios.create({
   headers: {
-    'X-Riot-Token': process.env.RIOT_API_KEY as string,
+    'X-Riot-Token': process.env.RIOT_API_KEY,
   },
 });
 
