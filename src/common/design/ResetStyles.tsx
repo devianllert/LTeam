@@ -59,10 +59,11 @@ export const ResetStyles = (): JSX.Element => {
         /**
         * Remove the list style on navigation lists in all browsers (opinionated).
         */
-        nav ol,
-        nav ul {
+        ol,
+        ul {
           list-style: none;
           padding: 0;
+          margin: 0;
         }
         /**
         * 1. Correct the inheritance and scaling of font size in all browsers.

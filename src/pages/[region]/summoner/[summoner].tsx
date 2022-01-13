@@ -89,7 +89,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
     return data;
   });
 
-  const [recentSummoners, setRecentSummoners] = useRecentSummoners();
+  const { addRecentSummoner } = useRecentSummoners();
 
   React.useEffect(() => {
     const searchedSummoner: RecentSummoner = {
@@ -99,7 +99,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
       id: query.data?.summonerData.id ?? '',
     };
 
-    setRecentSummoners(searchedSummoner);
+    addRecentSummoner(searchedSummoner);
   }, [query.data?.summonerData.id]);
 
   return (

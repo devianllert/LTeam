@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { RiSearchLine } from 'react-icons/ri';
+import { RiCheckLine, RiSearchLine } from 'react-icons/ri';
 
 import { regions } from '@/modules/summoner/constants/regions';
 
@@ -15,15 +15,18 @@ import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 
 import { MainLayout } from '@/layouts/main/components/MainLayout';
 import { IconButton } from '@/common/components/system/IconButton';
+import { ButtonBase } from '@/common/components/system/ButtonBase';
 import { getAppTitle } from '@/modules/core/meta/meta';
 import { Box } from '@/common/components/system/Box';
 import { InputAdornment } from '@/common/components/system/Input/InputAdornment';
 import { Input } from '@/common/components/system/Input';
 import { getTranslationsStaticProps } from '@/layouts/core/SSG';
 import * as Text from '@/common/components/system/Text';
+import * as Modal from '@/common/components/system/Modal';
+import { SearchSummonerList } from '@/modules/summoner/components/SearchSummonerList';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
-
-import { LocalStorageSummoners } from '@/modules/summoner/components/LocalStorageSummoners';
+import shadows from '@/common/design/tokens/shadows';
+import { Stack } from '@/common/components/system/Stack';
 
 const logger = createLogger('Index');
 
@@ -39,11 +42,16 @@ type Props = SSRPageProps & SSGPageProps<OnlyBrowserPageProps>;
 
 const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
   const { t, i18n } = useTranslation('index');
-
   const router = useRouter();
 
   const [summoner, setSummoner] = React.useState('');
-  const [region, setRegion] = React.useState<RegionAlias>('euw');
+  const [region, setRegion] = React.useState<RegionAlias>(regions.euw.value);
+  const [regionsModalIsOpen, setRegionsModalIsOpen] = React.useState(false);
+
+  const changeRegion = (newRegion: RegionAlias) => {
+    setRegion(newRegion);
+    setRegionsModalIsOpen(false);
+  };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -57,6 +65,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
     <>
       <Head>
         <title>{getAppTitle('Search')}</title>
+        <meta name="description" content="Real-time LoL Stats! Check your Summoner, Live Spectate and using powerful global League of Legends Statistics!" />
       </Head>
 
       <Box
@@ -64,7 +73,6 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="center"
         color="text.primary"
         backgroundImage="linear-gradient( rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45) ), url('/static/images/cosmic-queen-ashe-splash.jpg')"
         position="relative"
@@ -72,45 +80,104 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
         backgroundSize="cover"
         backgroundPosition="center"
         px={2}
+        py={64}
       >
-        <Text.Heading variant="h1" color="white">LTeam</Text.Heading>
-
         <Box
-          component="form"
           maxWidth="440px"
           width="100%"
-          mt={8}
-          onSubmit={onSubmit}
-          display="flex"
-          flexDirection="column"
+          pt="10%"
         >
-          <Input
-            suffix={(
-              <InputAdornment position="end">
-                <select
-                  onChange={(event) => setRegion(event.currentTarget.value as RegionAlias)}
-                  value={region}
-                >
-                  {Object.keys(regions).map((key) => {
-                    return (
-                      <option value={regions[key].value} key={key}>{regions[key].value}</option>
-                    );
-                  })}
-                </select>
+          <Text.Heading variant="h1" color="white" textAlign="center">LTeam</Text.Heading>
 
-                <IconButton size="small" edge="end" onClick={onSubmit}>
-                  <RiSearchLine />
-                </IconButton>
-              </InputAdornment>
-            )}
-            color="black"
-            fullWidth
-            placeholder="Search summoner"
-            value={summoner}
-            onChange={(event) => setSummoner(event.currentTarget.value)}
-          />
+          <Box
+            component="form"
+            mt={8}
+            onSubmit={onSubmit}
+            display="flex"
+            flexDirection="column"
+          >
+            <Input
+              fullWidth
+              placeholder="Search summoner"
+              value={summoner}
+              onChange={(event) => setSummoner(event.currentTarget.value)}
+              suffix={(
+                <InputAdornment position="end">
+                  <Box minWidth="96px" display="flex" alignItems="center">
+                    <Modal.Root open={regionsModalIsOpen} onOpenChange={setRegionsModalIsOpen}>
+                      <Modal.Trigger asChild>
+                        <Box
+                          component={ButtonBase}
+                          type="button"
+                          ml="auto"
+                          mr={1}
+                          px={2}
+                          borderRadius={4}
+                          backgroundColor="radix.primary9"
+                          color="white"
+                        >
+                          {region.toUpperCase()}
+                        </Box>
+                      </Modal.Trigger>
 
-          <LocalStorageSummoners />
+                      <Modal.Portal>
+                        <Modal.StyledOverlay />
+
+                        <Box
+                          component={Modal.StyledContent}
+                          padding={3}
+                          borderRadius={4}
+                          boxShadow={shadows[4]}
+                          maxWidth="440px"
+                          backgroundColor="background.secondary"
+                        >
+                          <Modal.Title asChild>
+                            <Text.Heading variant="h6" textAlign="center">Regions</Text.Heading>
+                          </Modal.Title>
+
+                          <Box component={Stack} direction={['column', 'row']} mt={3}>
+                            {Object.keys(regions).map((item) => (
+                              <Box
+                                width={['100%', '96px']}
+                                key={item}
+                              >
+                                <Box
+                                  component={ButtonBase}
+                                  type="button"
+                                  alignItems="center"
+                                  justifyContent="space-between"
+                                  width="100%"
+                                  color={region === item ? 'radix.primary11' : 'text.primary'}
+                                  onClick={() => changeRegion(item as RegionAlias)}
+                                >
+                                  <Text.Paragraph
+                                    variant="body2"
+                                    fontWeight={region === item ? 500 : 400}
+                                  >
+                                    {item.toUpperCase()}
+                                  </Text.Paragraph>
+
+                                  {region === item && <RiCheckLine size={16} />}
+                                </Box>
+                              </Box>
+                            ))}
+                          </Box>
+                        </Box>
+                      </Modal.Portal>
+                    </Modal.Root>
+
+                    <IconButton size="small">
+                      <RiSearchLine />
+                    </IconButton>
+                  </Box>
+                </InputAdornment>
+              )}
+            />
+
+            <Box mt={2}>
+              <SearchSummonerList />
+            </Box>
+          </Box>
         </Box>
       </Box>
     </>

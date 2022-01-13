@@ -1,15 +1,19 @@
 export const regions = {
-  br: {
-    value: 'br',
-    key: 'br1',
+  euw: {
+    value: 'euw',
+    key: 'euw1',
   },
   eun: {
     value: 'eun',
     key: 'eun1',
   },
-  euw: {
-    value: 'euw',
-    key: 'euw1',
+  na: {
+    value: 'na',
+    key: 'na1',
+  },
+  br: {
+    value: 'br',
+    key: 'br1',
   },
   jp: {
     value: 'jp',
@@ -26,10 +30,6 @@ export const regions = {
   las: {
     value: 'las',
     key: 'la2',
-  },
-  na: {
-    value: 'na',
-    key: 'na1',
   },
   oce: {
     value: 'oce',

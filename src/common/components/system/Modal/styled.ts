@@ -2,6 +2,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import { blackA } from '@radix-ui/colors';
+import { zIndex } from '@/common/design/tokens/zIndex';
 
 const overlayShow = keyframes({
   '0%': { opacity: 0 },
@@ -26,6 +27,7 @@ const contentHide = keyframes({
 export const StyledOverlay = styled(DialogPrimitive.Overlay)({
   backgroundColor: blackA.blackA9,
   position: 'fixed',
+  zIndex: zIndex.modal - 1,
   inset: 0,
   '@media (prefers-reduced-motion: no-preference)': {
     '&[data-state=open]': {
@@ -45,6 +47,7 @@ export const StyledContent = styled(DialogPrimitive.Content)({
   width: '90vw',
   maxWidth: '450px',
   maxHeight: '85vh',
+  zIndex: zIndex.modal,
 
   '&:focus': {
     outline: 'none',

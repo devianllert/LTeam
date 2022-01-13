@@ -23,7 +23,6 @@ timeago.register('ru', ru);
 export type MainHeaderProps = unknown;
 
 export const MainHeader = (): JSX.Element => {
-  const { t, i18n } = useTranslation();
   const [colorMode, setColorMode] = useColorMode();
 
   return (
@@ -47,7 +46,6 @@ export const MainHeader = (): JSX.Element => {
               <LocaleToggler />
 
               <IconButton
-                color="gray"
                 type="button"
                 label={`Change theme mode to ${colorMode === 'dark' ? 'light' : 'dark'}`}
                 onClick={() => setColorMode(colorMode === 'dark' ? 'default' : 'dark')}
