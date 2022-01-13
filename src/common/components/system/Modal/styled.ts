@@ -29,6 +29,7 @@ export const StyledOverlay = styled(DialogPrimitive.Overlay)({
   position: 'fixed',
   zIndex: zIndex.modal - 1,
   inset: 0,
+  zIndex: zIndex.modal - 1,
   '@media (prefers-reduced-motion: no-preference)': {
     '&[data-state=open]': {
       animation: `${overlayShow} 250ms cubic-bezier(0.16, 1, 0.3, 1)`,
