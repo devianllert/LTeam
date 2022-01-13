@@ -27,7 +27,6 @@ const contentHide = keyframes({
 export const StyledOverlay = styled(DialogPrimitive.Overlay)({
   backgroundColor: blackA.blackA9,
   position: 'fixed',
-  zIndex: zIndex.modal - 1,
   inset: 0,
   zIndex: zIndex.modal - 1,
   '@media (prefers-reduced-motion: no-preference)': {

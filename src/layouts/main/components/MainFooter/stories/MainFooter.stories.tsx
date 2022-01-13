@@ -1,17 +1,13 @@
 import * as React from 'react';
 import { Story, Meta } from '@storybook/react';
 
-import { MainFooter, MainFooterProps } from '../MainFooter';
+import { MainFooter } from '../MainFooter';
 
 export default {
   title: 'Components/MainFooter',
   component: MainFooter,
 } as Meta;
 
-const Template: Story<MainFooterProps> = (args) => <MainFooter {...args} />;
+const Template: Story = (args) => <MainFooter {...args} />;
 
 export const Basic = Template.bind({});
-
-Basic.args = {
-  children: 'MainFooter',
-};
