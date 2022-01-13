@@ -33,7 +33,7 @@ export const MainHeader = (): JSX.Element => {
             <Text.Heading variant="h6" component="a" color="white">{APP_TITLE}</Text.Heading>
           </Link>
           <DisplayOnBrowserMount>
-            <Stack alignItems="center" space={3}>
+            <Stack direction="row" alignItems="center" space={3}>
               {/* <Text.Heading variant="subtitle2" component="span">
                 {t('lastUpdate')}:
                 {' '}
