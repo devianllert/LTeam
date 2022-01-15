@@ -99,6 +99,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
             <Input
               fullWidth
               placeholder="Search summoner"
+              name="summonerUsername"
               value={summoner}
               onChange={(event) => setSummoner(event.currentTarget.value)}
               suffix={(

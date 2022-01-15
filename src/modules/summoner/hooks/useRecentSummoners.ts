@@ -12,6 +12,7 @@ export const useRecentSummoners = () => {
 
   const addRecentSummoner = React.useCallback((newSummoner: RecentSummoner) => {
     if (recentSummoners.some((summoner) => summoner.id === newSummoner.id)) return;
+    if (favoriteSummoners.some((summoner) => summoner.id === newSummoner.id)) return;
 
     setRecentSummoners((prevSummoners) => [
       newSummoner,
@@ -20,7 +21,7 @@ export const useRecentSummoners = () => {
         : prevSummoners
       ),
     ]);
-  }, [recentSummoners, setRecentSummoners]);
+  }, [favoriteSummoners, recentSummoners, setRecentSummoners]);
 
   const deleteRecentSummoner = React.useCallback((id: string) => {
     const filtredRecentSummoners = recentSummoners.filter((summoner) => summoner.id !== id);
