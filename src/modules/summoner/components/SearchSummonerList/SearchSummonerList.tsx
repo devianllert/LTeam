@@ -144,7 +144,7 @@ export const SearchSummonerList = () => {
 
   return (
     <DisplayOnBrowserMount>
-      {((recent.length > 0) || (recent.length > 0)) && (
+      {((recent.length > 0) || (favorites.length > 0)) && (
         <Box
           padding={3}
           backgroundColor="radix.gray4"
