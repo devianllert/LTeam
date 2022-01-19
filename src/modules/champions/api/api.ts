@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { random } from '@/modules/core/js/number';
 
-import { ChampionsData, Champion } from '../interfaces/champion.interface';
+import { ChampionsData, Champion, FreeChampions } from '../interfaces/champion.interface';
+
+const riotApi = axios.create({
+  headers: {
+    'X-Riot-Token': process.env.RIOT_API_KEY,
+  },
+});
 
 export const fetchAllChampions = async (): Promise<ChampionsData['data']> => {
   const { data } = await axios.get<ChampionsData>('https://ddragon.leagueoflegends.com/cdn/12.1.1/data/en_US/champion.json');
@@ -29,4 +35,9 @@ export const getRandomChampionSplashUrl = async (): Promise<string> => {
   const url = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-splashes/${championId}/${randomSkin.id}.jpg`;
 
   return url;
+};
+
+export const fetchFreeChampion = async (): Promise<FreeChampions> => {
+  const { data } = await riotApi.get<FreeChampions>('https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations');
+  return data;
 };

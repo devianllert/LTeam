@@ -70,3 +70,7 @@ export interface ChampionsData {
   type: 'champion';
   version: string;
 }
+
+export interface FreeChampions {
+  freeChampionIds: number[];
+}
