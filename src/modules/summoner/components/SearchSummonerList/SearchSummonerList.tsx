@@ -1,20 +1,19 @@
 import * as React from 'react';
 import Link from 'next/link';
 import {
+  RiCloseLine,
   RiHistoryFill,
   RiStarFill,
   RiStarLine,
 } from 'react-icons/ri';
-import { IoMdClose } from 'react-icons/io';
+import { useTranslation } from 'next-i18next';
 
 import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners';
-
 import { Box } from '@/common/components/system/Box';
 import { DisplayOnBrowserMount } from '@/common/components/rehydration/DisplayOnBrowserMount';
 import { IconButton } from '@/common/components/system/IconButton';
 import { Stack } from '@/common/components/system/Stack';
 import * as Text from '@/common/components/system/Text';
-
 import { RecentSummoner } from '@/modules/summoner/interfaces/summoner.interface';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import shadows from '@/common/design/tokens/shadows';
@@ -39,6 +38,8 @@ const SummonerItem = (props: SummonerItemProps) => {
     onDelete,
     onAddToFavorite,
   } = props;
+
+  const { t } = useTranslation('index');
 
   return (
     <Box
@@ -109,8 +110,8 @@ const SummonerItem = (props: SummonerItemProps) => {
       >
         {type === 'recent' && (
           <IconButton
-            title="Add to favorite"
-            label="Add to favorite"
+            title={t('found.actions.addToFavorite')}
+            label={t('found.actions.addToFavorite')}
             onClick={() => onAddToFavorite?.({
               id,
               name,
@@ -122,11 +123,11 @@ const SummonerItem = (props: SummonerItemProps) => {
           </IconButton>
         )}
         <IconButton
-          title="Delete from list"
-          label="Delete from list"
+          title={t('found.actions.delete')}
+          label={t('found.actions.delete')}
           onClick={() => onDelete(id)}
         >
-          <IoMdClose size={24} />
+          <RiCloseLine size={24} />
         </IconButton>
       </Box>
     </Box>
@@ -134,6 +135,8 @@ const SummonerItem = (props: SummonerItemProps) => {
 };
 
 export const SearchSummonerList = () => {
+  const { t } = useTranslation('index');
+
   const {
     recent,
     favorites,
@@ -154,7 +157,7 @@ export const SearchSummonerList = () => {
           <Stack space={4} direction="column" component="ul">
             {recent.length > 0 && (
               <Box>
-                <Text.Paragraph component="h6" variant="body2">Recent</Text.Paragraph>
+                <Text.Paragraph component="h6" variant="body2">{t('found.recent.title')}</Text.Paragraph>
 
                 <Stack space={2} component="ul" direction="column">
                   {recent.map((summoner) => (
@@ -174,7 +177,7 @@ export const SearchSummonerList = () => {
             )}
             {favorites.length > 0 && (
               <Box>
-                <Text.Paragraph component="h6" variant="body2">Favorites</Text.Paragraph>
+                <Text.Paragraph component="h6" variant="body2">{t('found.favorites.title')}</Text.Paragraph>
 
                 <Stack space={2} direction="column" component="ul">
                   {favorites.map((summoner) => (
