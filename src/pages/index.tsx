@@ -93,16 +93,6 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
         py={64}
       >
         <Box
-          position="absolute"
-          height="48px"
-          width="100%"
-          bottom={-22}
-          left={0}
-          right={0}
-          background="linear-gradient(transparent, var(--theme-ui-colors-background-primary) 50%, transparent)"
-        />
-
-        <Box
           maxWidth="440px"
           width="100%"
           pt="10%"

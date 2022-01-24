@@ -16,7 +16,7 @@ export const useRecentSummoners = () => {
 
     setRecentSummoners((prevSummoners) => [
       newSummoner,
-      ...(prevSummoners.length > 5
+      ...(prevSummoners.length >= 5
         ? prevSummoners.slice(0, prevSummoners.length - 1)
         : prevSummoners
       ),

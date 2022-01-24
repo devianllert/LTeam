@@ -5,18 +5,22 @@ interface ScrollbarOptions {
    * The track width.
    */
   width?: number;
+
   /**
    * The border of the thumb.
    */
   border?: number;
+
   /**
    * If true, show scroll bar only on hover.
    */
   hideOnBlur?: boolean;
+
   /**
    * The track color.
    */
   trackColor?: string;
+
   /**
    * The thumb color.
    */
@@ -59,7 +63,7 @@ export const createScrollbarStyles = (options: ScrollbarOptions = {}): Serialize
     },
 
     ...(hideOnBlur && {
-      '&:hover &::-webkit-scrollbar-thumb': {
+      '&:hover::-webkit-scrollbar-thumb': {
         visibility: 'visible',
       },
     }),
