@@ -63,7 +63,7 @@ const NotFound404Page: EnhancedNextPage<Props> = (): JSX.Element => {
       <Stack direction="column" space={3}>
         <Text.Paragraph variant="body1" color="text.secondary">{t('subtitle')}</Text.Paragraph>
 
-        <Text.Heading component="h1" variant="h4">{t('title')}</Text.Heading>
+        <Text.Paragraph component="h1" variant="h4">{t('title')}</Text.Paragraph>
 
         <Text.Paragraph variant="body2" color="text.secondary">{t('description')}</Text.Paragraph>
 

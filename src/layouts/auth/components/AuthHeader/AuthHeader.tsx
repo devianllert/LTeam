@@ -15,7 +15,7 @@ export const AuthHeader = (): JSX.Element => {
     <S.AuthHeaderRoot>
       <Container>
         <Link href="/" passHref>
-          <Text.Heading variant="h6" component="a">{APP_TITLE}</Text.Heading>
+          <Text.Paragraph variant="h6" component="a">{APP_TITLE}</Text.Paragraph>
         </Link>
       </Container>
     </S.AuthHeaderRoot>

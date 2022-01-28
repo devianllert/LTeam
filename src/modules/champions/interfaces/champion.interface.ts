@@ -48,6 +48,7 @@ export interface ChampionPreview {
     h: number;
     w: number;
   }
+  tags: string[]
 }
 
 export interface Champion {
@@ -73,4 +74,98 @@ export interface ChampionsData {
 
 export interface FreeChampions {
   freeChampionIds: number[];
+}
+
+export interface FetchedChampion {
+  id: string;
+  allytips: string;
+  blurb: string;
+  enemytips: string[];
+  key: string;
+  lore: string;
+  partype: string;
+  name: string;
+  passive: Passive;
+  skins: {
+    id: string;
+    num: number;
+    name: string;
+    chroma: boolean;
+  }[];
+  version: string;
+  tags: string[];
+  format: string;
+  stats: {
+    armor: number;
+    armorperlevel: number;
+    attackdamage: number;
+    attackdamageperlevel: number;
+    attackrange: number;
+    attackspeed: number;
+    attackspeedperlevel: number;
+    crit: number;
+    critperlevel: number;
+    hp: number;
+    hpperlevel: number;
+    hpregen: number;
+    hpregenperlevel: number;
+    movespeed: number;
+    mp: number;
+    mpperlevel: number;
+    mpregen: number;
+    mpregenperlevel: number;
+    spellblock: number;
+    spellblockperlevel: number;
+  };
+  spells: Spell[];
+}
+
+export interface FetchedChampionData {
+  data: Record<string, FetchedChampion>;
+  format: 'standAloneComplex';
+  type: 'champion';
+  version: string;
+}
+
+export interface Spell {
+  id: string;
+  cooldown: number[];
+  cooldownBurn: string;
+  cost: number[];
+  costBurn: string;
+  costType: string;
+  description: string;
+  effect: number[][];
+  effectBurn: string[];
+  image: {
+    full: string;
+    sprite: string;
+    h: number;
+    w: number;
+    group: string;
+  };
+  maxammo: string;
+  maxrank: number;
+  name: string;
+  range: number[];
+  rangeBurn: string;
+  resource: string;
+  tooltip: string;
+  vars: [];
+  leveltip: {
+    effect: string[];
+    label: string[];
+  };
+}
+
+export interface Passive {
+  name: string;
+  description: string;
+  image: {
+    full: string;
+    sprite: string;
+    h: number;
+    w: number;
+    group: string;
+  };
 }

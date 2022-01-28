@@ -57,7 +57,7 @@ const SignUpPage: EnhancedNextPage<Props> = (): JSX.Element => {
         maxWidth="440px"
         width="100%"
       >
-        <Text.Heading variant="h3" component="h1" sx={{ mb: 4 }}>{t('signup')}</Text.Heading>
+        <Text.Paragraph variant="h3" component="h1" sx={{ mb: 4 }}>{t('signup')}</Text.Paragraph>
 
         <Stack direction="column">
           <Input

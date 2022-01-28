@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { random } from '@/modules/core/js/number';
 
-import { ChampionsData, Champion, FreeChampions } from '../interfaces/champion.interface';
+import {
+  ChampionsData,
+  Champion,
+  FreeChampions,
+  ChampionPreview,
+  FetchedChampionData,
+} from '../interfaces/champion.interface';
 
 const riotApi = axios.create({
   headers: {
@@ -10,7 +16,7 @@ const riotApi = axios.create({
 });
 
 export const fetchAllChampions = async (): Promise<ChampionsData['data']> => {
-  const { data } = await axios.get<ChampionsData>('https://ddragon.leagueoflegends.com/cdn/12.1.1/data/en_US/champion.json');
+  const { data } = await axios.get<ChampionsData>('https://ddragon.leagueoflegends.com/cdn/12.2.1/data/en_US/champion.json');
 
   return data.data;
 };
@@ -39,5 +45,10 @@ export const getRandomChampionSplashUrl = async (): Promise<string> => {
 
 export const fetchFreeChampion = async (): Promise<FreeChampions> => {
   const { data } = await riotApi.get<FreeChampions>('https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations');
+  return data;
+};
+
+export const fetchChampion = async (name: string): Promise<FetchedChampionData> => {
+  const { data } = await axios.get<FetchedChampionData>(`https://ddragon.leagueoflegends.com/cdn/12.2.1/data/ru_RU/champion/${name}.json`);
   return data;
 };

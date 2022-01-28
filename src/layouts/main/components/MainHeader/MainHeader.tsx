@@ -30,7 +30,7 @@ export const MainHeader = (): JSX.Element => {
       <Container>
         <S.MainHeaderRoot>
           <Link href="/" passHref>
-            <Text.Heading variant="h6" component="a" color="white">{APP_TITLE}</Text.Heading>
+            <Text.Paragraph variant="h6" component="a" color="white">{APP_TITLE}</Text.Paragraph>
           </Link>
           <DisplayOnBrowserMount>
             <Stack direction="row" alignItems="center" space={3}>

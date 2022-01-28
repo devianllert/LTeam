@@ -119,8 +119,8 @@ const ChampionsPage: NextPage = () => {
             key={champion.id}
             margin="8px 8px 8px 0"
           >
-            <NextLink href={`/champions/${champion.name.toLowerCase()}`} passHref>
-              <Link href={`/champions/${champion.name.toLowerCase()}`}>
+            <NextLink href={`/champions/${champion.id}`} passHref>
+              <Link href={`/champions/${champion.id}`}>
                 <Box
                   display="flex"
                   flexDirection="column"
