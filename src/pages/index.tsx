@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import { RiCheckLine, RiCloseLine, RiSearchLine } from 'react-icons/ri';
 
 import { regions } from '@/modules/summoner/constants/regions';
@@ -16,7 +15,6 @@ import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 import { MainLayout } from '@/layouts/main/components/MainLayout';
 import { IconButton } from '@/common/components/system/IconButton';
 import { ButtonBase } from '@/common/components/system/ButtonBase';
-import { getAppTitle } from '@/modules/core/meta/meta';
 import { Box } from '@/common/components/system/Box';
 import { InputAdornment } from '@/common/components/system/Input/InputAdornment';
 import { Input } from '@/common/components/system/Input';
@@ -27,6 +25,7 @@ import { SearchSummonerList } from '@/modules/summoner/components/SearchSummoner
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import shadows from '@/common/design/tokens/shadows';
 import { Stack } from '@/common/components/system/Stack';
+import { PageSEO } from '@/modules/core/meta/page-seo';
 
 const logger = createLogger('Index');
 
@@ -73,10 +72,10 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
 
   return (
     <>
-      <Head>
-        <title>{getAppTitle(t('meta.title'))}</title>
-        <meta name="description" content={t('meta.description')} />
-      </Head>
+      <PageSEO
+        title={t('seo.title')}
+        description={t('seo.description')}
+      />
 
       <Box
         minHeight="100vh"
