@@ -3,6 +3,7 @@ import { request } from './api';
 import { LoLMethods } from '../constants/methods';
 import { Cluster } from '../constants/platforms';
 import { MatchDTO } from '../interfaces/match.interface';
+import { MatchTimelineDTO } from '../interfaces/match-timeline.interface';
 
 export interface GetAllMatchesOptions {
   platform: Cluster;
@@ -49,8 +50,8 @@ export interface GetMatchTimelineByIdOptions {
   matchId: string;
 }
 
-export const getMatchTimelineById = async (options: GetMatchTimelineByIdOptions): Promise<MatchDTO[]> => {
-  const data = await request<MatchDTO[]>({
+export const getMatchTimelineById = async (options: GetMatchTimelineByIdOptions): Promise<MatchTimelineDTO> => {
+  const data = await request<MatchTimelineDTO>({
     endpoint: LoLMethods.MATCH_V5.GET_MATCH_TIMELINE_BY_ID,
     platform: options.platform,
     params: {
