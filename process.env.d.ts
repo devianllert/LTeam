@@ -22,6 +22,8 @@ declare global {
       NEXT_PUBLIC_APP_BUILD_TIME: string;
       NEXT_PUBLIC_APP_BUILD_TIMESTAMP: string;
 
+      RIOT_API_KEY: string;
+
       // Sentry variables
       NEXT_PUBLIC_SENTRY_DSN: string;
       SENTRY_AUTH_TOKEN: string;
