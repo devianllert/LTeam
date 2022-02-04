@@ -4,7 +4,6 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Head from 'next/head';
-import { RiSearchLine } from 'react-icons/ri';
 import axios from 'axios';
 
 import { summonerRequest, SummonerResponse } from '@/modules/summoner/api';
@@ -15,11 +14,8 @@ import { SSRPageProps } from '@/layouts/core/types/SSRPageProps';
 import { createLogger } from '@/modules/core/logging/logger';
 import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 import { MainLayout } from '@/layouts/main/components/MainLayout';
-import { IconButton } from '@/common/components/system/IconButton';
 import { getAppTitle } from '@/modules/core/meta/meta';
 import { Box } from '@/common/components/system/Box';
-import { InputAdornment } from '@/common/components/system/Input/InputAdornment';
-import { Input } from '@/common/components/system/Input';
 import * as Text from '@/common/components/system/Text';
 import { getCoreServerSideProps } from '@/layouts/core/SSR';
 import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners';
@@ -102,6 +98,16 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
     addRecentSummoner(searchedSummoner);
   }, [query.data?.summonerData.id]);
 
+  const getWinRate = () => {
+    const win = query.data?.leagueData.data[0].wins ?? 0;
+    const lose = query.data?.leagueData.data[0].losses ?? 0;
+
+    const winRate = (win / (win + lose)) * 100;
+    return winRate;
+  };
+
+  const winRate = getWinRate();
+
   return (
     <>
       <Head>
@@ -123,28 +129,115 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
         px={2}
       >
 
-        <Text.Heading variant="h1" color="white">LTeam</Text.Heading>
-
         <Box
-          component="form"
-          maxWidth="440px"
-          width="100%"
-          mt={8}
+          display="flex"
+          flexDirection="column"
         >
-          <Input
-            suffix={(
-              <InputAdornment position="end">
-                <IconButton size="small" edge="end">
-                  <RiSearchLine />
-                </IconButton>
-              </InputAdornment>
-            )}
-            color="black"
-            fullWidth
-            placeholder="Search summoner"
-            defaultValue={summoner}
-          />
+          <Text.Heading variant="h4">{summoner}</Text.Heading>
+
+          <Box
+            display="flex"
+          >
+
+            <Box
+              position="relative"
+            >
+              <Box
+                borderRadius="50%"
+                overflow="hidden"
+                width={96}
+                height={96}
+                border="1px solid"
+              >
+                <img
+                  src={`http://ddragon.leagueoflegends.com/cdn/12.2.1/img/profileicon/${query.data?.summonerData.profileIconId.toString() as string}.png`}
+                  alt=""
+                  width={96}
+                  height={96}
+                />
+              </Box>
+
+              <Box
+                position="absolute"
+                borderRadius="50%"
+                border="1px solid"
+                left="-4px"
+                width={32}
+                height={32}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                bottom="4px"
+                backgroundColor="radix.blue5"
+              >
+                <Text.Paragraph variant="body3">{query.data?.summonerData.summonerLevel}</Text.Paragraph>
+              </Box>
+            </Box>
+
+            <Box
+              display="flex"
+              flexDirection="column"
+              marginLeft={2}
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+              >
+                <Box
+                  width={48}
+                  height={48}
+                  border="1px solid"
+                  borderRadius="50%"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  overflow="hidden"
+                >
+                  <img
+                    src={`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${query.data?.leagueData.data[0].tier.toLowerCase() as string}.png`}
+                    alt=""
+                    width={36}
+                    height={36}
+                  />
+                </Box>
+
+                <Text.Paragraph variant="body1" sx={{ marginLeft: '8px' }}>{query.data?.leagueData.data[0].tier} {query.data?.leagueData.data[0].rank}</Text.Paragraph>
+
+                <Text.Paragraph variant="body1" sx={{ marginLeft: '12px' }}>{query.data?.leagueData.data[0].leaguePoints} LP</Text.Paragraph>
+              </Box>
+              <Box
+                display="flex"
+                marginTop={1}
+              >
+                <Box
+                  padding={1}
+                  backgroundColor="radix.gray7"
+                  borderRadius="4px"
+                >
+                  <Text.Paragraph variant="body1">SOLO / DUO</Text.Paragraph>
+                </Box>
+
+                <Box
+                  marginLeft={3}
+                  display="flex"
+                  padding={1}
+                  backgroundColor="radix.gray7"
+                  borderRadius="4px"
+                >
+                  <Text.Paragraph variant="body1">RECORD:</Text.Paragraph>
+
+                  <Text.Paragraph variant="body1" color="radix.green11" sx={{ marginLeft: '8px' }}>{query.data?.leagueData.data[0].wins}</Text.Paragraph>
+                  <Text.Paragraph variant="body1">-</Text.Paragraph>
+                  <Text.Paragraph variant="body1" color="radix.red11">{query.data?.leagueData.data[0].losses}</Text.Paragraph>
+
+                  <Text.Paragraph variant="body1" sx={{ marginLeft: '12px' }}>WINRATE: </Text.Paragraph>
+                  <Text.Paragraph variant="body1" color={winRate >= 50 ? 'radix.green11' : 'radix.red11'} sx={{ marginLeft: '8px' }}>{winRate.toFixed(2)} %</Text.Paragraph>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </Box>
+
       </Box>
     </>
   );
