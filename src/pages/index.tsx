@@ -31,6 +31,16 @@ import { Stack } from '@/common/components/system/Stack';
 const logger = createLogger('Index');
 
 /**
+ * Only executed on the server side at build time.
+ *
+ * @return Props (as "SSGPageProps") that will be passed to the Page component, as props.
+ *
+ * @see https://github.com/vercel/next.js/discussions/10949#discussioncomment-6884
+ * @see https://nextjs.org/docs/basic-features/data-fetching#getstaticprops-static-generation
+ */
+export const getStaticProps = getTranslationsStaticProps(['common', 'index']);
+
+/**
  * SSR pages are first rendered by the server
  * Then, they're rendered by the client, and gain additional props (defined in OnlyBrowserPageProps)
  * Because this last case is the most common (server bundle only happens during development stage), we consider it a default
@@ -184,8 +194,6 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
     </>
   );
 };
-
-export const getStaticProps = getTranslationsStaticProps(['common', 'index']);
 
 IndexPage.Layout = MainLayout;
 

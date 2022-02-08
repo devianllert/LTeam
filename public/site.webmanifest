@@ -1,0 +1,10 @@
+{
+  "name": "LeagueTeam",
+  "short_name": "LTeam",
+  "description": "LTeam -> https://example.vercel.app",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "background_color": "#000000",
+  "orientation": "portrait"
+}
