@@ -8,7 +8,6 @@ import { RiSearchLine } from 'react-icons/ri';
 import axios from 'axios';
 
 import { summonerRequest, SummonerResponse } from '@/modules/summoner/api';
-import { getSummonerByName } from '@/modules/riot/api/summoner';
 import { SummonerV4DTO } from '@/modules/riot/interfaces/summoner.interface';
 import { RecentSummoner } from '@/modules/summoner/interfaces/summoner.interface';
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
@@ -29,6 +28,7 @@ import { REACT_QUERY_STATE_PROP_NAME } from '@/modules/core/rquery/react-query';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import { LoLRegion } from '@/modules/riot/constants/platforms';
 import { getRegionFromAlias } from '@/modules/summoner/utils/region';
+import { getSummonerByName } from '@/modules/riot/api/summoner';
 
 const logger = createLogger('Index');
 
