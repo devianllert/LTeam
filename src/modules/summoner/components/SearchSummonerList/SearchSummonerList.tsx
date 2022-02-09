@@ -1,23 +1,24 @@
 import * as React from 'react';
 import Link from 'next/link';
 import {
+  RiCloseLine,
   RiHistoryFill,
   RiStarFill,
   RiStarLine,
 } from 'react-icons/ri';
-import { IoMdClose } from 'react-icons/io';
+import { useTranslation } from 'next-i18next';
 
 import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners';
-
 import { Box } from '@/common/components/system/Box';
 import { DisplayOnBrowserMount } from '@/common/components/rehydration/DisplayOnBrowserMount';
 import { IconButton } from '@/common/components/system/IconButton';
 import { Stack } from '@/common/components/system/Stack';
 import * as Text from '@/common/components/system/Text';
-
 import { RecentSummoner } from '@/modules/summoner/interfaces/summoner.interface';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import shadows from '@/common/design/tokens/shadows';
+
+import * as S from './styled';
 
 interface SummonerItemProps {
   id: string;
@@ -40,13 +41,14 @@ const SummonerItem = (props: SummonerItemProps) => {
     onAddToFavorite,
   } = props;
 
+  const { t } = useTranslation('index');
+
   return (
     <Box
       backgroundColor="background.primary"
       display="flex"
-      py={2}
-      pr={2}
-      pl={3}
+      py="12px"
+      px={2}
       width="100%"
       alignItems="center"
       justifyContent="flex-start"
@@ -60,7 +62,7 @@ const SummonerItem = (props: SummonerItemProps) => {
       >
         <Box
           display="flex"
-          minWidth={96}
+          minWidth={84}
           alignItems="center"
         >
           {type === 'favorite' ? <RiStarFill size={24} color="orange" /> : <RiHistoryFill size={24} />}
@@ -70,7 +72,7 @@ const SummonerItem = (props: SummonerItemProps) => {
             justifyContent="center"
             alignItems="center"
             padding="4px 8px"
-            marginLeft={3}
+            marginLeft={2}
             borderRadius={4}
             backgroundColor="radix.primary5"
           >
@@ -94,7 +96,8 @@ const SummonerItem = (props: SummonerItemProps) => {
           <Text.Paragraph
             component="a"
             variant="body2"
-            color="radix.primary"
+            fontWeight={500}
+            color="radix.primary11"
             noWrap
           >
             {name}
@@ -109,8 +112,9 @@ const SummonerItem = (props: SummonerItemProps) => {
       >
         {type === 'recent' && (
           <IconButton
-            title="Add to favorite"
-            label="Add to favorite"
+            size="small"
+            title={t('found.actions.addToFavorite')}
+            label={t('found.actions.addToFavorite')}
             onClick={() => onAddToFavorite?.({
               id,
               name,
@@ -118,15 +122,16 @@ const SummonerItem = (props: SummonerItemProps) => {
               region,
             })}
           >
-            <RiStarLine size={24} />
+            <RiStarLine />
           </IconButton>
         )}
         <IconButton
-          title="Delete from list"
-          label="Delete from list"
+          size="small"
+          title={t('found.actions.delete')}
+          label={t('found.actions.delete')}
           onClick={() => onDelete(id)}
         >
-          <IoMdClose size={24} />
+          <RiCloseLine />
         </IconButton>
       </Box>
     </Box>
@@ -134,6 +139,8 @@ const SummonerItem = (props: SummonerItemProps) => {
 };
 
 export const SearchSummonerList = () => {
+  const { t } = useTranslation('index');
+
   const {
     recent,
     favorites,
@@ -146,52 +153,60 @@ export const SearchSummonerList = () => {
     <DisplayOnBrowserMount>
       {((recent.length > 0) || (favorites.length > 0)) && (
         <Box
-          padding={3}
           backgroundColor="radix.gray4"
           borderRadius={4}
           boxShadow={shadows[4]}
+          py={3}
         >
-          <Stack space={4} direction="column" component="ul">
-            {recent.length > 0 && (
-              <Box>
-                <Text.Paragraph component="h6" variant="body2">Recent</Text.Paragraph>
+          <Box
+            component={S.ScrollbarArea}
+            maxHeight={320}
+            overflowY="scroll"
+            px={3}
+            pr={1}
+          >
+            <Stack space={4} direction="column" component="ul">
+              {recent.length > 0 && (
+                <Box>
+                  <Text.Paragraph component="h6" variant="body2">{t('found.recent.title')}</Text.Paragraph>
 
-                <Stack space={2} component="ul" direction="column">
-                  {recent.map((summoner) => (
-                    <SummonerItem
-                      key={summoner.id}
-                      type="recent"
-                      id={summoner.id}
-                      icon={summoner.icon}
-                      name={summoner.name}
-                      region={summoner.region}
-                      onDelete={deleteRecentSummoner}
-                      onAddToFavorite={addFavoriteSummoner}
-                    />
-                  ))}
-                </Stack>
-              </Box>
-            )}
-            {favorites.length > 0 && (
-              <Box>
-                <Text.Paragraph component="h6" variant="body2">Favorites</Text.Paragraph>
+                  <Stack space={2} component="ul" direction="column">
+                    {recent.map((summoner) => (
+                      <SummonerItem
+                        key={summoner.id}
+                        type="recent"
+                        id={summoner.id}
+                        icon={summoner.icon}
+                        name={summoner.name}
+                        region={summoner.region}
+                        onDelete={deleteRecentSummoner}
+                        onAddToFavorite={addFavoriteSummoner}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
+              )}
+              {favorites.length > 0 && (
+                <Box>
+                  <Text.Paragraph component="h6" variant="body2">{t('found.favorites.title')}</Text.Paragraph>
 
-                <Stack space={2} direction="column" component="ul">
-                  {favorites.map((summoner) => (
-                    <SummonerItem
-                      key={summoner.id}
-                      type="favorite"
-                      id={summoner.id}
-                      icon={summoner.icon}
-                      name={summoner.name}
-                      region={summoner.region}
-                      onDelete={deleteFavoriteSummoner}
-                    />
-                  ))}
-                </Stack>
-              </Box>
-            )}
-          </Stack>
+                  <Stack space={2} direction="column" component="ul">
+                    {favorites.map((summoner) => (
+                      <SummonerItem
+                        key={summoner.id}
+                        type="favorite"
+                        id={summoner.id}
+                        icon={summoner.icon}
+                        name={summoner.name}
+                        region={summoner.region}
+                        onDelete={deleteFavoriteSummoner}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
+              )}
+            </Stack>
+          </Box>
         </Box>
       )}
     </DisplayOnBrowserMount>
