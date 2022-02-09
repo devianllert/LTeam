@@ -1,6 +1,6 @@
-import { useTranslation, Trans } from 'next-i18next';
+import * as React from 'react';
 import Image from 'next/image';
-import Head from 'next/head';
+import { useTranslation, Trans } from 'next-i18next';
 import Link from 'next/link';
 import {
   RiAppsLine,
@@ -17,7 +17,6 @@ import { createLogger } from '@/modules/core/logging/logger';
 import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 import { MainLayout } from '@/layouts/main/components/MainLayout';
 import { Button } from '@/common/components/system/Button';
-import { getAppTitle } from '@/modules/core/meta/meta';
 import { Box } from '@/common/components/system/Box';
 import { Container } from '@/common/components/system/Container';
 import { getTranslationsStaticProps } from '@/layouts/core/SSG';
