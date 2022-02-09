@@ -7,6 +7,7 @@ import Head from 'next/head';
 import axios from 'axios';
 
 import { summonerRequest, SummonerResponse } from '@/modules/summoner/api';
+import { SummonerV4DTO } from '@/modules/riot/interfaces/summoner.interface';
 import { RecentSummoner } from '@/modules/summoner/interfaces/summoner.interface';
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
 import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
@@ -21,6 +22,9 @@ import { getCoreServerSideProps } from '@/layouts/core/SSR';
 import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners';
 import { REACT_QUERY_STATE_PROP_NAME } from '@/modules/core/rquery/react-query';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
+import { LoLRegion } from '@/modules/riot/constants/platforms';
+import { getRegionFromAlias } from '@/modules/summoner/utils/region';
+import { getSummonerByName } from '@/modules/riot/api/summoner';
 
 const logger = createLogger('Index');
 
@@ -36,6 +40,8 @@ export const getServerSideProps: GetServerSideProps<GetServerSidePageProps> = as
   const region = context.query.region as RegionAlias;
   const summoner = context.query.summoner as string;
 
+  const regionKey = getRegionFromAlias(region).key;
+
   const queryClient = new QueryClient();
 
   if ('props' in commonServerSideProps) {
@@ -44,7 +50,7 @@ export const getServerSideProps: GetServerSideProps<GetServerSidePageProps> = as
     } = commonServerSideProps;
 
     try {
-      await queryClient.fetchQuery(['summoner', region, summoner], () => summonerRequest(region, summoner));
+      await queryClient.fetchQuery(['summoner', region, summoner], () => getSummonerByName({ platform: regionKey as LoLRegion, name: summoner }));
 
       return {
         // Props returned here will be available as page properties (pageProps)
@@ -54,7 +60,7 @@ export const getServerSideProps: GetServerSideProps<GetServerSidePageProps> = as
         },
       };
     } catch (error) {
-      // logger.error(error);
+      logger.error(error);
       throw new Error('Errors were detected in query.');
     }
   } else {
@@ -78,9 +84,10 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
   const router = useRouter();
 
   const { region, summoner } = router.query;
+  const summonerName = summoner as string;
 
   const query = useQuery(['summoner', region, summoner], async () => {
-    const { data } = await axios.get<SummonerResponse>(`/api/${region as string}/summoner/${summoner as string}`);
+    const { data } = await axios.get<SummonerV4DTO>(`/api/riot/${region as string}/summoner/${summonerName}`);
 
     return data;
   });
@@ -89,14 +96,14 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
 
   React.useEffect(() => {
     const searchedSummoner: RecentSummoner = {
-      name: query.data?.summonerData.name ?? '',
+      name: query.data?.name ?? '',
       region: region as RegionAlias,
-      icon: query.data?.summonerData.profileIconId ?? 0,
-      id: query.data?.summonerData.id ?? '',
+      icon: query.data?.profileIconId ?? 0,
+      id: query.data?.id ?? '',
     };
 
     addRecentSummoner(searchedSummoner);
-  }, [query.data?.summonerData.id]);
+  }, [query.data?.id]);
 
   const getWinRate = () => {
     const win = query.data?.leagueData.data[0].wins ?? 0;

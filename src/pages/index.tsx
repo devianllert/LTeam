@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
-import { RiCheckLine, RiSearchLine } from 'react-icons/ri';
+import { RiCheckLine, RiCloseLine, RiSearchLine } from 'react-icons/ri';
 
 import { regions } from '@/modules/summoner/constants/regions';
 
@@ -16,7 +15,6 @@ import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 import { MainLayout } from '@/layouts/main/components/MainLayout';
 import { IconButton } from '@/common/components/system/IconButton';
 import { ButtonBase } from '@/common/components/system/ButtonBase';
-import { getAppTitle } from '@/modules/core/meta/meta';
 import { Box } from '@/common/components/system/Box';
 import { InputAdornment } from '@/common/components/system/Input/InputAdornment';
 import { Input } from '@/common/components/system/Input';
@@ -27,8 +25,19 @@ import { SearchSummonerList } from '@/modules/summoner/components/SearchSummoner
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import shadows from '@/common/design/tokens/shadows';
 import { Stack } from '@/common/components/system/Stack';
+import { PageSEO } from '@/modules/core/meta/page-seo';
 
 const logger = createLogger('Index');
+
+/**
+ * Only executed on the server side at build time.
+ *
+ * @return Props (as "SSGPageProps") that will be passed to the Page component, as props.
+ *
+ * @see https://github.com/vercel/next.js/discussions/10949#discussioncomment-6884
+ * @see https://nextjs.org/docs/basic-features/data-fetching#getstaticprops-static-generation
+ */
+export const getStaticProps = getTranslationsStaticProps(['common', 'index']);
 
 /**
  * SSR pages are first rendered by the server
@@ -41,7 +50,7 @@ const logger = createLogger('Index');
 type Props = SSRPageProps & SSGPageProps<OnlyBrowserPageProps>;
 
 const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
-  const { t, i18n } = useTranslation('index');
+  const { t } = useTranslation('index');
   const router = useRouter();
 
   const [summoner, setSummoner] = React.useState('');
@@ -63,10 +72,10 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
 
   return (
     <>
-      <Head>
-        <title>{getAppTitle('Search')}</title>
-        <meta name="description" content="Real-time LoL Stats! Check your Summoner, Live Spectate and using powerful global League of Legends Statistics!" />
-      </Head>
+      <PageSEO
+        title={t('seo.title')}
+        description={t('seo.description')}
+      />
 
       <Box
         minHeight="100vh"
@@ -74,7 +83,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
         flexDirection="column"
         alignItems="center"
         color="text.primary"
-        backgroundImage="linear-gradient( rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45) ), url('/static/images/cosmic-queen-ashe-splash.jpg')"
+        backgroundImage="linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/images/cosmic-queen-ashe-splash.jpg')"
         position="relative"
         backgroundRepeat="no-repeat"
         backgroundSize="cover"
@@ -98,7 +107,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
           >
             <Input
               fullWidth
-              placeholder="Search summoner"
+              placeholder={t('search.title')}
               name="summonerUsername"
               value={summoner}
               onChange={(event) => setSummoner(event.currentTarget.value)}
@@ -132,8 +141,21 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
                           maxWidth="440px"
                           backgroundColor="background.secondary"
                         >
+                          <Modal.Close asChild>
+                            <IconButton
+                              size="small"
+                              sx={{
+                                position: 'absolute',
+                                top: '8px',
+                                right: '8px',
+                              }}
+                            >
+                              <RiCloseLine />
+                            </IconButton>
+                          </Modal.Close>
+
                           <Modal.Title asChild>
-                            <Text.Heading variant="h6" textAlign="center">Regions</Text.Heading>
+                            <Text.Heading variant="h6" textAlign="center">{t('regions.title')}</Text.Heading>
                           </Modal.Title>
 
                           <Box component={Stack} direction={['column', 'row']} mt={3}>
@@ -153,6 +175,7 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
                                 >
                                   <Text.Paragraph
                                     variant="body2"
+                                    component="span"
                                     fontWeight={region === item ? 500 : 400}
                                   >
                                     {item.toUpperCase()}
@@ -167,7 +190,12 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
                       </Modal.Portal>
                     </Modal.Root>
 
-                    <IconButton size="small">
+                    <IconButton
+                      title={t('search.actions.search')}
+                      label={t('search.actions.search')}
+                      size="small"
+                      type="submit"
+                    >
                       <RiSearchLine />
                     </IconButton>
                   </Box>
@@ -184,8 +212,6 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
     </>
   );
 };
-
-export const getStaticProps = getTranslationsStaticProps(['common', 'index']);
 
 IndexPage.Layout = MainLayout;
 
