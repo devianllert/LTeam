@@ -32,7 +32,7 @@ export interface UsePaginationValue {
    * The group of page numbers in the pagination.
    */
   pages: number[];
-  
+
   /**
    * The current page.
    */

@@ -23,7 +23,6 @@ timeago.register('ru', ru);
 export type MainHeaderProps = unknown;
 
 export const MainHeader = (): JSX.Element => {
-  const { t, i18n } = useTranslation();
   const [colorMode, setColorMode] = useColorMode();
 
   return (
@@ -31,7 +30,7 @@ export const MainHeader = (): JSX.Element => {
       <Container>
         <S.MainHeaderRoot>
           <Link href="/" passHref>
-            <Text.Heading variant="h6" component="a">{APP_TITLE}</Text.Heading>
+            <Text.Heading variant="h6" component="a" color="white">{APP_TITLE}</Text.Heading>
           </Link>
           <DisplayOnBrowserMount>
             <Stack direction="row" alignItems="center" space={3}>
@@ -47,7 +46,6 @@ export const MainHeader = (): JSX.Element => {
               <LocaleToggler />
 
               <IconButton
-                color="gray"
                 type="button"
                 label={`Change theme mode to ${colorMode === 'dark' ? 'light' : 'dark'}`}
                 onClick={() => setColorMode(colorMode === 'dark' ? 'default' : 'dark')}

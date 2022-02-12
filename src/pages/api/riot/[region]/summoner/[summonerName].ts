@@ -4,6 +4,8 @@ import * as Sentry from '@sentry/nextjs';
 import { configureReq } from '@/modules/core/sentry/sentry';
 import { LoLRegion } from '@/modules/riot/constants/platforms';
 import { getSummonerByName } from '@/modules/riot/api/summoner';
+import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
+import { getRegionFromAlias } from '@/modules/summoner/utils/region';
 
 const fileLabel = 'api/riot/[region]/summoner/[summonerName]';
 
@@ -11,10 +13,13 @@ export const summoner = async (req: NextApiRequest, res: NextApiResponse): Promi
   try {
     configureReq(req, { fileLabel });
 
-    const region = req.query.region as LoLRegion;
+    // const region = req.query.region as LoLRegion;
+    const region = req.query.region as RegionAlias;
     const summonerName = req.query.summonerName as LoLRegion;
 
-    const data = await getSummonerByName({ name: summonerName, platform: region });
+    const regionKey = getRegionFromAlias(region).key;
+
+    const data = await getSummonerByName({ name: summonerName, platform: regionKey.toUpperCase() as LoLRegion });
 
     res.json(data);
   } catch (e: unknown) {

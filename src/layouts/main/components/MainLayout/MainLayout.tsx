@@ -1,6 +1,10 @@
 import * as React from 'react';
 
+import { Box } from '@/common/components/layout/Box';
+import * as Text from '@/common/components/system/Text';
+
 import { MainHeader } from '../MainHeader';
+import { MainFooter } from '../MainFooter';
 
 import * as S from './styled';
 
@@ -21,6 +25,8 @@ export const MainLayout = (props: MainLayoutProps): JSX.Element => {
       <MainHeader />
 
       {children}
+
+      <MainFooter />
     </S.MainLayoutContainer>
   );
 };

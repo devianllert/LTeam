@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { RiTranslate2 } from 'react-icons/ri';
 
-import { SUPPORTED_LOCALES } from '@/modules/core/i18n/i18n';
+import { SUPPORTED_LANGUAGES } from '@/modules/core/i18n/i18n';
 
 import * as DropdownMenu from '@/common/components/system/DropdownMenu';
 import { IconButton } from '@/common/components/system/IconButton';
@@ -26,7 +26,7 @@ export const LocaleToggler = (): JSX.Element => {
 
       <DropdownMenu.Content>
         <DropdownMenu.RadioGroup value={i18n.language} onValueChange={changeLocale}>
-          {Object.entries(SUPPORTED_LOCALES).map(([_, key]) => (
+          {SUPPORTED_LANGUAGES.map((key) => (
             <DropdownMenu.RadioItem key={key} value={key}>
               {key.toUpperCase()}
             </DropdownMenu.RadioItem>

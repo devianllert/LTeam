@@ -63,6 +63,7 @@ export const ResetStyles = (): JSX.Element => {
         ul {
           list-style: none;
           padding: 0;
+          margin: 0;
         }
         /**
         * 1. Correct the inheritance and scaling of font size in all browsers.
