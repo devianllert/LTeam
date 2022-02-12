@@ -3,12 +3,21 @@ import createPersistedState from 'use-persisted-state';
 
 import { RecentSummoner } from '../interfaces/summoner.interface';
 
-const useRecentSummonersState = createPersistedState('recent-summoners');
-const useFavoriteSummonersState = createPersistedState('favorite-summoners');
+const useRecentSummonersState = createPersistedState<RecentSummoner[]>('recent-summoners');
+const useFavoriteSummonersState = createPersistedState<RecentSummoner[]>('favorite-summoners');
 
-export const useRecentSummoners = () => {
-  const [recentSummoners, setRecentSummoners] = useRecentSummonersState<RecentSummoner[]>([]);
-  const [favoriteSummoners, setFavoriteSummoners] = useFavoriteSummonersState<RecentSummoner[]>([]);
+export interface UseRecentSummonersValue {
+  recent: RecentSummoner[];
+  favorites: RecentSummoner[];
+  addRecentSummoner: (summoner: RecentSummoner) => void;
+  addFavoriteSummoner: (summoner: RecentSummoner) => void;
+  deleteRecentSummoner: (id: string) => void;
+  deleteFavoriteSummoner: (id: string) => void;
+}
+
+export const useRecentSummoners = (): UseRecentSummonersValue => {
+  const [recentSummoners, setRecentSummoners] = useRecentSummonersState([]);
+  const [favoriteSummoners, setFavoriteSummoners] = useFavoriteSummonersState([]);
 
   const addRecentSummoner = React.useCallback((newSummoner: RecentSummoner) => {
     if (recentSummoners.some((summoner) => summoner.id === newSummoner.id)) return;
@@ -51,5 +60,5 @@ export const useRecentSummoners = () => {
     addFavoriteSummoner,
     deleteRecentSummoner,
     deleteFavoriteSummoner,
-  } as const;
+  };
 };
