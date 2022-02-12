@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { RiCheckLine, RiCloseLine, RiSearchLine } from 'react-icons/ri';
 
 import { regions } from '@/modules/summoner/constants/regions';
+import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
 import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
@@ -13,19 +14,17 @@ import { createLogger } from '@/modules/core/logging/logger';
 import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 
 import { MainLayout } from '@/layouts/main/components/MainLayout';
-import { IconButton } from '@/common/components/system/IconButton';
-import { ButtonBase } from '@/common/components/system/ButtonBase';
-import { Box } from '@/common/components/system/Box';
-import { InputAdornment } from '@/common/components/system/Input/InputAdornment';
-import { Input } from '@/common/components/system/Input';
+import { Box } from '@/common/components/layout/Box';
 import { getTranslationsStaticProps } from '@/layouts/core/SSG';
 import * as Text from '@/common/components/system/Text';
 import * as Modal from '@/common/components/system/Modal';
-import { SearchSummonerList } from '@/modules/summoner/components/SearchSummonerList';
-import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
-import shadows from '@/common/design/tokens/shadows';
-import { Stack } from '@/common/components/system/Stack';
+import { Stack } from '@/common/components/layout/Stack';
 import { PageSEO } from '@/modules/core/meta/page-seo';
+import { ButtonBase } from '@/common/components/system/ButtonBase';
+import { Input, InputAdornment } from '@/common/components/system/Input';
+import { IconButton } from '@/common/components/system/IconButton';
+import { shadows } from '@/common/design/tokens/shadows';
+import { SearchSummonerList } from '@/modules/summoner/components/SearchSummonerList';
 
 const logger = createLogger('Index');
 
