@@ -33,8 +33,8 @@ export interface GetMatchByIdOptions {
   matchId: string;
 }
 
-export const getMatchById = async (options: GetMatchByIdOptions): Promise<MatchDTO[]> => {
-  const data = await request<MatchDTO[]>({
+export const getMatchById = async (options: GetMatchByIdOptions): Promise<MatchDTO> => {
+  const data = await request<MatchDTO>({
     endpoint: LoLMethods.MATCH_V5.GET_MATCH_BY_ID,
     platform: options.platform,
     params: {
@@ -59,5 +59,15 @@ export const getMatchTimelineById = async (options: GetMatchTimelineByIdOptions)
     },
   });
 
+  return data;
+};
+
+export interface GetMatchesFullInfoOptions {
+  matchesId: string[];
+  platform: Cluster;
+}
+
+export const getMatchesFullInfo = async (options: GetMatchesFullInfoOptions): Promise<MatchDTO[]> => {
+  const data = await Promise.all(options.matchesId.map((matchId) => getMatchById({ platform: options.platform, matchId })));
   return data;
 };

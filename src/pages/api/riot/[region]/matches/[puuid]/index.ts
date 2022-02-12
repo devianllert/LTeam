@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/nextjs';
 
 import { configureReq } from '@/modules/core/sentry/sentry';
 import { LoLRegion, regionToCluster } from '@/modules/riot/constants/platforms';
-import { getAllMatches } from '@/modules/riot/api/match';
+import { getAllMatches, getMatchesFullInfo } from '@/modules/riot/api/match';
 
 const fileLabel = 'api/riot/[region]/matches/[summonerName]/index';
 
@@ -25,7 +25,9 @@ export const match = async (req: NextApiRequest, res: NextApiResponse): Promise<
       ...searchParams,
     });
 
-    res.json(matches);
+    const allMatchesInfo = await getMatchesFullInfo({ platform: regionToCluster(region), matchesId: matches });
+
+    res.json(allMatchesInfo);
   } catch (e: unknown) {
     res.json({
       error: true,
