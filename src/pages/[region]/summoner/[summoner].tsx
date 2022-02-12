@@ -7,7 +7,6 @@ import Head from 'next/head';
 import { RiSearchLine } from 'react-icons/ri';
 import axios from 'axios';
 
-import { summonerRequest, SummonerResponse } from '@/modules/summoner/api';
 import { SummonerV4DTO } from '@/modules/riot/interfaces/summoner.interface';
 import { RecentSummoner } from '@/modules/summoner/interfaces/summoner.interface';
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
@@ -18,7 +17,7 @@ import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 import { MainLayout } from '@/layouts/main/components/MainLayout';
 import { IconButton } from '@/common/components/system/IconButton';
 import { getAppTitle } from '@/modules/core/meta/meta';
-import { Box } from '@/common/components/system/Box';
+import { Box } from '@/common/components/layout/Box';
 import { InputAdornment } from '@/common/components/system/Input/InputAdornment';
 import { Input } from '@/common/components/system/Input';
 import * as Text from '@/common/components/system/Text';

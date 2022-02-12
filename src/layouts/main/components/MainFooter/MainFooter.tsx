@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import * as Text from '@/common/components/system/Text';
-import { Container } from '@/common/components/system/Container';
-import { Box } from '@/common/components/system/Box';
-import { Inset } from '@/common/components/system/Inset';
+import { Container } from '@/common/components/layout/Container';
+import { Box } from '@/common/components/layout/Box';
+import { Inset } from '@/common/components/layout/Inset';
 
 import * as S from './styled';
 

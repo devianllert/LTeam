@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box } from '@/common/components/system/Box';
+import { Box } from '@/common/components/layout/Box';
 import * as Text from '@/common/components/system/Text';
 
 import { MainHeader } from '../MainHeader';
