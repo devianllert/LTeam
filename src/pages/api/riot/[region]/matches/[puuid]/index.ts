@@ -3,9 +3,9 @@ import * as Sentry from '@sentry/nextjs';
 
 import { configureReq } from '@/modules/core/sentry/sentry';
 import { LoLRegion, regionToCluster } from '@/modules/riot/constants/platforms';
-import { getAllMatches, getMatchesFullInfo } from '@/modules/riot/api/match';
+import { getMatches } from '@/modules/riot/api/match';
 
-const fileLabel = 'api/riot/[region]/matches/[summonerName]/index';
+const fileLabel = 'api/riot/[region]/matches/[puuid]/index';
 
 export const match = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
@@ -19,17 +19,15 @@ export const match = async (req: NextApiRequest, res: NextApiResponse): Promise<
       offset: Number(req.query.offset as string) || 0,
     };
 
-    const matches = await getAllMatches({
+    const matches = await getMatches({
       puuid,
       platform: regionToCluster(region),
       ...searchParams,
     });
 
-    const allMatchesInfo = await getMatchesFullInfo({ platform: regionToCluster(region), matchesId: matches });
-
-    res.json(allMatchesInfo);
+    res.json(matches);
   } catch (e: unknown) {
-    res.json({
+    res.status(500).json({
       error: true,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       message:

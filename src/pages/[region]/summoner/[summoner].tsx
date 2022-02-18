@@ -6,8 +6,7 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Head from 'next/head';
 import axios from 'axios';
 
-import { SummonerV4DTO } from '@/modules/riot/interfaces/summoner.interface';
-import { SummonerLeagueDTO } from '@/modules/riot/interfaces/league.interface';
+import { SummonerBasicInfo } from '@/modules/riot/interfaces/summoner.interface';
 import { RecentSummoner } from '@/modules/summoner/interfaces/summoner.interface';
 import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
 import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
@@ -17,9 +16,7 @@ import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 import { MainLayout } from '@/layouts/main/components/MainLayout';
 import { getAppTitle } from '@/modules/core/meta/meta';
 import { SummonerProfileStats } from '@/modules/summoner/components/SummonerProfileStats';
-import { Match } from '@/modules/summoner/components/Match';
-import { Box } from '@/common/components/system/Box';
-import * as Text from '@/common/components/system/Text';
+import { Box } from '@/common/components/layout/Box';
 import { getCoreServerSideProps } from '@/layouts/core/SSR';
 import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners';
 import { REACT_QUERY_STATE_PROP_NAME } from '@/modules/core/rquery/react-query';
@@ -27,10 +24,10 @@ import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import { LoLRegion, regionToCluster } from '@/modules/riot/constants/platforms';
 import { getRegionFromAlias } from '@/modules/summoner/utils/region';
 import { getSummonerByName } from '@/modules/riot/api/summoner';
-import { getAllMatches, getMatchesFullInfo } from '@/modules/riot/api/match';
-import { getSummonerLeague } from '@/modules/riot/api/league';
-import { MatchDTO } from '@/modules/riot/interfaces/match.interface';
-import { Stack } from '@/common/components/system/Stack';
+import { getMatches } from '@/modules/riot/api/match';
+import { getSummonerLeagues } from '@/modules/riot/api/league';
+import { MatchList } from '@/modules/match/components/MatchList';
+import { Container } from '@/common/components/layout/Container';
 
 const logger = createLogger('Index');
 
@@ -46,7 +43,7 @@ export const getServerSideProps: GetServerSideProps<GetServerSidePageProps> = as
   const region = context.query.region as RegionAlias;
   const summoner = context.query.summoner as string;
 
-  const regionKey = getRegionFromAlias(region).key;
+  const regionKey = getRegionFromAlias(region).key as LoLRegion;
 
   const queryClient = new QueryClient();
 
@@ -56,24 +53,22 @@ export const getServerSideProps: GetServerSideProps<GetServerSidePageProps> = as
     } = commonServerSideProps;
 
     try {
-      await queryClient.fetchQuery(['summoner', region, summoner], async () => {
-        const summonerInfo = await getSummonerByName({ platform: regionKey as LoLRegion, name: summoner });
-        const allMatches = await getAllMatches({
-          platform: regionToCluster(regionKey as LoLRegion),
-          puuid: summonerInfo.puuid,
-          limit: 10,
-          offset: 0,
-        });
+      const data = await queryClient.fetchQuery(['summoner', region, summoner], async () => {
+        const account = await getSummonerByName({ platform: regionKey, name: summoner });
+        const leagues = await getSummonerLeagues({ platform: regionKey, summonerId: account.id });
 
-        const allMatchesInfo = await getMatchesFullInfo({ platform: regionToCluster(regionKey as LoLRegion), matchesId: allMatches });
-        console.log(allMatchesInfo);
-        const summonerLeagueStats = await getSummonerLeague({ platform: regionKey as LoLRegion, summonerId: summonerInfo.id });
         return {
-          summonerInfo,
-          summonerLeagueStats,
-          allMatchesInfo,
+          account,
+          leagues,
         };
       });
+
+      await queryClient.fetchQuery(['matches', summoner], async () => getMatches({
+        platform: regionToCluster(regionKey),
+        puuid: data.account.puuid,
+        limit: 10,
+        offset: 0,
+      }));
 
       return {
         // Props returned here will be available as page properties (pageProps)
@@ -110,43 +105,25 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
   const summonerName = summoner as string;
 
   const query = useQuery(['summoner', region, summoner], async () => {
-    const summonerInfo = await axios.get<SummonerV4DTO>(`/api/riot/${region as string}/summoner/${summonerName}`);
-    const summonerLeagueStats = await axios.get<SummonerLeagueDTO[]>(`/api/riot/${region as string}/league/${summonerInfo.data.id}`);
-    const allMatches = await axios.get<MatchDTO[]>(`/api/riot/${region as string}/matches/${summonerInfo.data.puuid}`);
+    const { data } = await axios.get<SummonerBasicInfo>(`/api/riot/${region as string}/summoner/${summonerName}`);
 
-    return {
-      summonerInfo: summonerInfo.data,
-      allMatchesInfo: allMatches.data,
-      summonerLeagueStats: summonerLeagueStats.data,
-    };
+    return data;
+  }, {
+    refetchOnWindowFocus: false,
   });
-
-  console.log(query.data);
 
   const { addRecentSummoner } = useRecentSummoners();
 
   React.useEffect(() => {
     const searchedSummoner: RecentSummoner = {
-      name: query.data?.summonerInfo.name ?? '',
+      name: query.data?.account.name ?? '',
       region: region as RegionAlias,
-      icon: query.data?.summonerInfo.profileIconId ?? 0,
-      id: query.data?.summonerInfo.id ?? '',
+      icon: query.data?.account.profileIconId ?? 0,
+      id: query.data?.account.id ?? '',
     };
 
     addRecentSummoner(searchedSummoner);
-  }, [query.data?.summonerInfo.id]);
-
-  const getWinRate = () => {
-    const win = query.data?.summonerLeagueStats[0].wins ?? 0;
-    const lose = query.data?.summonerLeagueStats[0].losses ?? 0;
-
-    const winRate = (win / (win + lose)) * 100;
-    return winRate;
-  };
-
-  const winRate = getWinRate();
-  const matches = query.data?.allMatchesInfo ?? [];
-  // console.log(matches);
+  }, [query.data?.account.id]);
 
   return (
     <>
@@ -154,45 +131,16 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
         <title>{getAppTitle('Search')}</title>
       </Head>
 
-      <Box
-        minHeight="100vh"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        color="text.primary"
-        backgroundImage="linear-gradient( rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45) ), url('/static/images/cosmic-queen-ashe-splash.jpg')"
-        position="relative"
-        backgroundRepeat="no-repeat"
-        backgroundSize="cover"
-        backgroundPosition="center"
-        px={2}
-      >
-
+      <Container>
         <SummonerProfileStats
-          summonerLevel={query.data?.summonerInfo.summonerLevel ?? 0}
-          profileIconId={query.data?.summonerInfo.profileIconId ?? 0}
-          summonerName={query.data?.summonerInfo.name ?? ''}
-          profileStats={query.data?.summonerLeagueStats[0] ?? {} as SummonerLeagueDTO}
+          summonerLevel={query.data?.account.summonerLevel ?? 0}
+          profileIconId={query.data?.account.profileIconId ?? 0}
+          summonerName={query.data?.account.name ?? ''}
+          profileStats={query.data?.leagues[0]}
         />
 
-        <Box
-          marginTop={3}
-        >
-          <Stack
-            direction="column"
-            space={4}
-          >
-            {matches.map((matchData) => (
-              <Match
-                key={matchData.metadata.matchId}
-                matchData={matchData}
-                summoner={query.data?.summonerInfo.puuid ?? ''}
-              />
-            ))}
-          </Stack>
-        </Box>
-      </Box>
+        {query.data?.account.puuid && <MatchList puuid={query.data.account.puuid} />}
+      </Container>
     </>
   );
 };

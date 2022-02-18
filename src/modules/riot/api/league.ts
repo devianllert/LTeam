@@ -9,7 +9,7 @@ export interface GetSummonerLeagueOptions {
   summonerId: string;
 }
 
-export const getSummonerLeague = async (options: GetSummonerLeagueOptions): Promise<SummonerLeagueDTO[]> => {
+export const getSummonerLeagues = async (options: GetSummonerLeagueOptions): Promise<SummonerLeagueDTO[]> => {
   const data = await request<SummonerLeagueDTO[]>({
     endpoint: LoLMethods.LEAGUE.GET_ENTRIES_BY_SUMMONER,
     platform: options.platform,

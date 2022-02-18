@@ -1,5 +1,7 @@
+import { SummonerLeagueDTO } from './league.interface';
+
 /**
- * Summoner basic info
+ * Summoner account info
  */
 export interface SummonerV4DTO {
   /**
@@ -36,4 +38,9 @@ export interface SummonerV4DTO {
    * Encrypted account ID. Max length 56 characters.
    */
   accountId: string;
+}
+
+export interface SummonerBasicInfo {
+  account: SummonerV4DTO;
+  leagues: SummonerLeagueDTO[];
 }

@@ -17,7 +17,7 @@ export const rotation = async (req: NextApiRequest, res: NextApiResponse): Promi
 
     res.json(data);
   } catch (e: unknown) {
-    res.json({
+    res.status(500).json({
       error: true,
       message:
         process.env.NEXT_PUBLIC_APP_STAGE === 'production'

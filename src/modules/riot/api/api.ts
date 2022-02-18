@@ -40,6 +40,8 @@ export const request = async <T>(options: RequestOptions): Promise<T> => {
       },
     });
 
+    
+
     return data;
   } catch (error) {
     logger.error(resource, error);

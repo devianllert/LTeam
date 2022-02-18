@@ -6,6 +6,7 @@ import { LoLRegion } from '@/modules/riot/constants/platforms';
 import { getSummonerByName } from '@/modules/riot/api/summoner';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import { getRegionFromAlias } from '@/modules/summoner/utils/region';
+import { getSummonerLeagues } from '@/modules/riot/api/league';
 
 const fileLabel = 'api/riot/[region]/summoner/[summonerName]';
 
@@ -13,17 +14,22 @@ export const summoner = async (req: NextApiRequest, res: NextApiResponse): Promi
   try {
     configureReq(req, { fileLabel });
 
-    // const region = req.query.region as LoLRegion;
     const region = req.query.region as RegionAlias;
-    const summonerName = req.query.summonerName as LoLRegion;
+    const summonerName = req.query.summonerName as string;
 
-    const regionKey = getRegionFromAlias(region).key;
+    const regionKey = getRegionFromAlias(region).key as LoLRegion;
 
-    const data = await getSummonerByName({ name: summonerName, platform: regionKey.toUpperCase() as LoLRegion });
+    const account = await getSummonerByName({ name: summonerName, platform: regionKey });
+    const leagues = await getSummonerLeagues({ platform: regionKey, summonerId: account.id });
+
+    const data = {
+      account,
+      leagues,
+    };
 
     res.json(data);
   } catch (e: unknown) {
-    res.json({
+    res.status(500).json({
       error: true,
       message:
         process.env.NEXT_PUBLIC_APP_STAGE === 'production'

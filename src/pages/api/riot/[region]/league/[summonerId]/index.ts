@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/nextjs';
 
 import { configureReq } from '@/modules/core/sentry/sentry';
 import { LoLRegion } from '@/modules/riot/constants/platforms';
-import { getSummonerLeague } from '@/modules/riot/api/league';
+import { getSummonerLeagues } from '@/modules/riot/api/league';
 import { getRegionFromAlias } from '@/modules/summoner/utils/region';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 
@@ -14,15 +14,15 @@ export const league = async (req: NextApiRequest, res: NextApiResponse): Promise
     configureReq(req, { fileLabel });
 
     const region = req.query.region as RegionAlias;
-    const summonerId = req.query.summonerId as LoLRegion;
+    const summonerId = req.query.summonerId as string;
 
-    const regionKey = getRegionFromAlias(region).key;
+    const regionKey = getRegionFromAlias(region).key as LoLRegion;
 
-    const data = await getSummonerLeague({ summonerId, platform: regionKey as LoLRegion });
+    const data = await getSummonerLeagues({ summonerId, platform: regionKey });
 
     res.json(data);
   } catch (e: unknown) {
-    res.json({
+    res.status(500).json({
       error: true,
       message:
         process.env.NEXT_PUBLIC_APP_STAGE === 'production'

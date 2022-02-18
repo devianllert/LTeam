@@ -15,7 +15,7 @@ import { configureSentry } from '@/modules/core/sentry/sentry';
  * - API endpoints, for per-API additional metadata.
  * - React components, for per-component additional metadata.
  *
- * Doesn't initialize Sentry if SENTRY_DSN isn't defined.
+ * Doesn't initialize Sentry if NEXT_PUBLIC_SENTRY_DSN isn't defined.
  * Re-exports the Sentry object to make it simpler to consume by developers (DX).
  *
  * Automatically applied on the browser, thanks to @sentry/nextjs.
@@ -38,7 +38,7 @@ import { configureSentry } from '@/modules/core/sentry/sentry';
  * - API endpoints, for per-API additional metadata.
  * - React components, for per-component additional metadata.
  *
- * Doesn't initialize Sentry if SENTRY_DSN isn't defined.
+ * Doesn't initialize Sentry if NEXT_PUBLIC_SENTRY_DSN isn't defined.
  * Re-exports the Sentry object to make it simpler to consume by developers (DX).
  *
  * Automatically applied on the browser, thanks to @sentry/nextjs.

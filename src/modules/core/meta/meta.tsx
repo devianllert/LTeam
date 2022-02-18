@@ -1,7 +1,7 @@
 import darkColors from '@/common/design/themes/dark/colors';
 import lightColors from '@/common/design/themes/light/colors';
 
-export const APP_TITLE = 'dvnllrt';
+export const APP_TITLE = 'lteam';
 
 export const getAppTitle = (title?: string): string => (title ? `${title} | ${APP_TITLE}` : APP_TITLE);
 

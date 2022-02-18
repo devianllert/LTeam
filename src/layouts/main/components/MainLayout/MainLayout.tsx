@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box } from '@/common/components/system/Box';
+import { Box } from '@/common/components/layout/Box';
 import * as Text from '@/common/components/system/Text';
 
 import { MainHeader } from '../MainHeader';
@@ -24,7 +24,13 @@ export const MainLayout = (props: MainLayoutProps): JSX.Element => {
     <S.MainLayoutContainer>
       <MainHeader />
 
-      {children}
+      <Box
+        component="main"
+        flex={1}
+        color="text.primary"
+      >
+        {children}
+      </Box>
 
       <MainFooter />
     </S.MainLayoutContainer>

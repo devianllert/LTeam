@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box } from '@/common/components/system/Box';
+import { Box } from '@/common/components/layout/Box';
 import * as Text from '@/common/components/system/Text';
 import { SummonerLeagueDTO } from '@/modules/riot/interfaces/league.interface';
 
@@ -8,7 +8,7 @@ export interface SummonerProfileStatsProps {
   profileIconId: number;
   summonerName: string;
   summonerLevel: number
-  profileStats: SummonerLeagueDTO;
+  profileStats?: SummonerLeagueDTO;
 }
 
 export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
@@ -20,11 +20,12 @@ export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
   } = props;
 
   const getWinRate = () => {
-    const win = profileStats.wins ?? 0;
-    const lose = profileStats.losses ?? 0;
+    if (!profileStats) return 0;
 
-    const winRate = (win / (win + lose)) * 100;
-    return winRate;
+    const win = profileStats.wins;
+    const lose = profileStats.losses;
+
+    return (win / (win + lose)) * 100;
   };
 
   const winRate = getWinRate();
@@ -95,16 +96,16 @@ export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
               overflow="hidden"
             >
               <img
-                src={`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${profileStats.tier.toLowerCase()}.png`}
+                src={`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${(profileStats?.tier ?? 'unranked').toLowerCase()}.png`}
                 alt=""
                 width={36}
                 height={36}
               />
             </Box>
 
-            <Text.Paragraph variant="body1" sx={{ marginLeft: '8px' }}>{profileStats.tier} {profileStats.rank}</Text.Paragraph>
+            <Text.Paragraph variant="body1" sx={{ marginLeft: '8px' }}>{profileStats?.tier ?? 'UNRANKED'} {profileStats?.rank}</Text.Paragraph>
 
-            <Text.Paragraph variant="body1" sx={{ marginLeft: '12px' }}>{profileStats.leaguePoints} LP</Text.Paragraph>
+            <Text.Paragraph variant="body1" sx={{ marginLeft: '12px' }}>{profileStats?.leaguePoints ?? 0} LP</Text.Paragraph>
           </Box>
           <Box
             display="flex"
@@ -127,9 +128,9 @@ export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
             >
               <Text.Paragraph variant="body1">RECORD:</Text.Paragraph>
 
-              <Text.Paragraph variant="body1" color="radix.green11" sx={{ marginLeft: '8px' }}>{profileStats.wins}</Text.Paragraph>
+              <Text.Paragraph variant="body1" color="radix.green11" sx={{ marginLeft: '8px' }}>{profileStats?.wins ?? 0}</Text.Paragraph>
               <Text.Paragraph variant="body1">-</Text.Paragraph>
-              <Text.Paragraph variant="body1" color="radix.red11">{profileStats.losses}</Text.Paragraph>
+              <Text.Paragraph variant="body1" color="radix.red11">{profileStats?.losses ?? 0}</Text.Paragraph>
 
               <Text.Paragraph variant="body1" sx={{ marginLeft: '12px' }}>WINRATE: </Text.Paragraph>
               <Text.Paragraph variant="body1" color={winRate >= 50 ? 'radix.green11' : 'radix.red11'} sx={{ marginLeft: '8px' }}>{winRate.toFixed(2)} %</Text.Paragraph>

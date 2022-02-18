@@ -12,7 +12,7 @@ export interface GetAllMatchesOptions {
   offset?: number;
 }
 
-export const getAllMatches = async (options: GetAllMatchesOptions): Promise<string[]> => {
+export const getMatchIds = async (options: GetAllMatchesOptions): Promise<string[]> => {
   const data = await request<string[]>({
     endpoint: LoLMethods.MATCH_V5.GET_IDS_BY_PUUID,
     platform: options.platform,
@@ -45,6 +45,21 @@ export const getMatchById = async (options: GetMatchByIdOptions): Promise<MatchD
   return data;
 };
 
+export interface GetMatchesFullInfoOptions {
+  matchesId: string[];
+  platform: Cluster;
+}
+
+export const getMatches = async (options: GetAllMatchesOptions): Promise<MatchDTO[]> => {
+  const matchIds = await getMatchIds(options);
+
+  const requests = matchIds.map((matchId) => getMatchById({ platform: options.platform, matchId }));
+
+  const matches = await Promise.all(requests);
+
+  return matches;
+};
+
 export interface GetMatchTimelineByIdOptions {
   platform: Cluster;
   matchId: string;
@@ -59,15 +74,5 @@ export const getMatchTimelineById = async (options: GetMatchTimelineByIdOptions)
     },
   });
 
-  return data;
-};
-
-export interface GetMatchesFullInfoOptions {
-  matchesId: string[];
-  platform: Cluster;
-}
-
-export const getMatchesFullInfo = async (options: GetMatchesFullInfoOptions): Promise<MatchDTO[]> => {
-  const data = await Promise.all(options.matchesId.map((matchId) => getMatchById({ platform: options.platform, matchId })));
   return data;
 };

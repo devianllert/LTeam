@@ -9,10 +9,10 @@ import {
 import { useTranslation } from 'next-i18next';
 
 import { useRecentSummoners } from '@/modules/summoner/hooks/useRecentSummoners';
-import { Box } from '@/common/components/system/Box';
+import { Box } from '@/common/components/layout/Box';
 import { DisplayOnBrowserMount } from '@/common/components/rehydration/DisplayOnBrowserMount';
 import { IconButton } from '@/common/components/system/IconButton';
-import { Stack } from '@/common/components/system/Stack';
+import { Stack } from '@/common/components/layout/Stack';
 import * as Text from '@/common/components/system/Text';
 import { RecentSummoner } from '@/modules/summoner/interfaces/summoner.interface';
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';

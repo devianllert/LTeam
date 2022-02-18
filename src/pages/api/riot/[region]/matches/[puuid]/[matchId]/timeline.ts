@@ -21,7 +21,7 @@ export const matchTimeline = async (req: NextApiRequest, res: NextApiResponse): 
 
     res.json(matches);
   } catch (e: unknown) {
-    res.json({
+    res.status(500).json({
       error: true,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       message:
