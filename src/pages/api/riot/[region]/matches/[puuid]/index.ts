@@ -15,7 +15,7 @@ export const match = async (req: NextApiRequest, res: NextApiResponse): Promise<
     const puuid = req.query.puuid as string;
 
     const searchParams = {
-      limit: Number(req.query.limit as string) || 10,
+      limit: Number(req.query.limit as string) || 5,
       offset: Number(req.query.offset as string) || 0,
     };
 

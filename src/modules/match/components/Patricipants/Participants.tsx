@@ -32,7 +32,7 @@ export const Participants = (props: ParticipantsProps) => {
       direction="column"
       space={1}
     >
-      {arr.map((index) => (
+      { (participants.length > 1) && arr.map((index) => (
         <Box
           key={participants[index].puuid}
           display="flex"
@@ -43,7 +43,7 @@ export const Participants = (props: ParticipantsProps) => {
 
           <Link href={`/${region}/summoner/${participants[index].summonerName}`} passHref>
             <Button component="a">
-              <Text.Paragraph variant="body3" sx={{ width: 100, textAlign: 'center' }}>{sliceSummonerName(participants[index].summonerName)}</Text.Paragraph>
+              <Text.Paragraph variant="body3" sx={{ width: 100, textAlign: 'center' }}>{sliceSummonerName(participants[index]?.summonerName)}</Text.Paragraph>
             </Button>
           </Link>
 
@@ -57,7 +57,7 @@ export const Participants = (props: ParticipantsProps) => {
               alt=""
               width={24}
               height={24}
-              src={`https://ddragon.leagueoflegends.com/cdn/12.3.1/img/champion/${participants[index].championName}.png`}
+              src={`https://ddragon.leagueoflegends.com/cdn/12.4.1/img/champion/${participants[index]?.championName}.png`}
             />
           </Box>
 
@@ -87,13 +87,13 @@ export const Participants = (props: ParticipantsProps) => {
               alt=""
               width={24}
               height={24}
-              src={`https://ddragon.leagueoflegends.com/cdn/12.3.1/img/champion/${participants[index + 5].championName}.png`}
+              src={`https://ddragon.leagueoflegends.com/cdn/12.4.1/img/champion/${participants[index + 5]?.championName ?? 'Garen'}.png`}
             />
           </Box>
 
-          <Link href={`/${region}/summoner/${participants[index + 5].summonerName}`} passHref>
+          <Link href={`/${region}/summoner/${participants[index + 5]?.summonerName}`} passHref>
             <Button component="a">
-              <Text.Paragraph variant="body3" sx={{ width: 100 }}>{sliceSummonerName(participants[index + 5].summonerName)}</Text.Paragraph>
+              <Text.Paragraph variant="body3" sx={{ width: 100 }}>{sliceSummonerName(participants[index + 5]?.summonerName)}</Text.Paragraph>
             </Button>
           </Link>
         </Box>

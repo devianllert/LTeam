@@ -5,7 +5,7 @@ export interface ItemsTableProps {
   items: number[];
 }
 
-const itemBaseUrl = 'http://ddragon.leagueoflegends.com/cdn/12.3.1/img/item/';
+const itemBaseUrl = 'http://ddragon.leagueoflegends.com/cdn/12.4.1/img/item/';
 
 export const ItemsTable = (props: ItemsTableProps) => {
   const {

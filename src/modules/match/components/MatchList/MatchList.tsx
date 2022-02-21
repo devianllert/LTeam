@@ -8,7 +8,11 @@ import { Box } from '@/common/components/layout/Box';
 import { Stack } from '@/common/components/layout/Stack';
 import * as Text from '@/common/components/system/Text';
 
+import { getSummonerSpellsData } from '@/modules/riot/api/summonerSpells';
+
 import { Match } from '../../Match';
+import { SummonerSpells } from '@/modules/riot/interfaces/summonerSpells.interface';
+import { getSummonerRunesData } from '@/modules/riot/api/summonerRunes';
 
 export interface MatchListProps {
   puuid: string;
@@ -26,12 +30,20 @@ export const MatchList = (props: MatchListProps): JSX.Element => {
   const query = useQuery(['matches', summoner], async () => {
     const { data } = await axios.get<MatchDTO[]>(`/api/riot/${region as string}/matches/${puuid}`);
 
-    return data;
+    const summonerSpellsData = await getSummonerSpellsData();
+    const summonerRunesData = await getSummonerRunesData();
+
+    return {
+      data,
+      summonerSpellsData,
+      summonerRunes: summonerRunesData,
+    };
   }, {
     refetchOnWindowFocus: false,
   });
 
-  const matches = query.data ?? [];
+  const matches = query.data?.data ?? [];
+  const runesData = query.data?.summonerRunes ?? [];
 
   const hasMatches = matches.length !== 0;
 
@@ -55,6 +67,8 @@ export const MatchList = (props: MatchListProps): JSX.Element => {
               key={matchData.metadata.matchId}
               matchData={matchData}
               summoner={puuid}
+              summonerSpells={query.data?.summonerSpellsData ?? {} as SummonerSpells}
+              summonerRunes={runesData}
             />
           ))}
         </Stack>

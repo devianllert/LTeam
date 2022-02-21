@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<GetServerSidePageProps> = as
       await queryClient.fetchQuery(['matches', summoner], async () => getMatches({
         platform: regionToCluster(regionKey),
         puuid: data.account.puuid,
-        limit: 10,
+        limit: 5,
         offset: 0,
       }));
 
