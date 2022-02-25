@@ -8,9 +8,11 @@ import * as Text from '@/common/components/system/Text';
 import { Button } from '@/common/components/system/Button';
 import { ParticipantDTO } from '@/modules/riot/interfaces/match.interface';
 
+import { getChampionImgUrl } from '@/modules/ddragon';
+import { getPositionUrl } from '@/modules/communityDragon';
+
 export interface ParticipantsProps {
   participants: ParticipantDTO[];
-  summoner: string;
   summonerPosition: number;
 }
 
@@ -21,7 +23,7 @@ const sliceSummonerName = (summonerName: string) => {
 };
 
 export const Participants = (props: ParticipantsProps) => {
-  const { participants, summoner, summonerPosition } = props;
+  const { participants, summonerPosition } = props;
   const router = useRouter();
   const region = router.query.region as string;
 
@@ -57,7 +59,7 @@ export const Participants = (props: ParticipantsProps) => {
               alt=""
               width={24}
               height={24}
-              src={`https://ddragon.leagueoflegends.com/cdn/12.4.1/img/champion/${participants[index]?.championName}.png`}
+              src={getChampionImgUrl(participants[index].championName)}
             />
           </Box>
 
@@ -72,7 +74,7 @@ export const Participants = (props: ParticipantsProps) => {
               width={24}
               height={24}
               alt=""
-              src={`https://raw.communitydragon.org/12.3/plugins/rcp-fe-lol-clash/global/default/icon-position-${participants[index].individualPosition.toLocaleLowerCase()}-blue.png`}
+              src={getPositionUrl(participants[index].individualPosition.toLocaleLowerCase())}
             />
             )}
           </Box>
@@ -87,7 +89,7 @@ export const Participants = (props: ParticipantsProps) => {
               alt=""
               width={24}
               height={24}
-              src={`https://ddragon.leagueoflegends.com/cdn/12.4.1/img/champion/${participants[index + 5]?.championName ?? 'Garen'}.png`}
+              src={getChampionImgUrl(participants[index + 5].championName)}
             />
           </Box>
 

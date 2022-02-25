@@ -1,14 +1,19 @@
 import * as React from 'react';
 
 import { Box } from '@/common/components/layout/Box';
+import { Button } from '@/common/components/system/Button';
 import * as Text from '@/common/components/system/Text';
 import { SummonerLeagueDTO } from '@/modules/riot/interfaces/league.interface';
+import { quequqTypes } from '../../constants/QueueType';
+
+import { getSummonerIconUrl } from '@/modules/ddragon';
+import { getTierUrl } from '@/modules/communityDragon';
 
 export interface SummonerProfileStatsProps {
   profileIconId: number;
   summonerName: string;
   summonerLevel: number
-  profileStats?: SummonerLeagueDTO;
+  profileStats?: SummonerLeagueDTO[];
 }
 
 export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
@@ -19,16 +24,21 @@ export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
     profileStats,
   } = props;
 
-  const getWinRate = () => {
-    if (!profileStats) return 0;
+  const [queueType, setQueueType] = React.useState('RANKED_SOLO_5x5');
 
-    const win = profileStats.wins;
-    const lose = profileStats.losses;
+  const queue = profileStats?.find((queueItem) => queueItem.queueType === queueType);
+  const getWinRate = () => {
+    if (!queue) return 0;
+
+    const win = queue.wins;
+    const lose = queue.losses;
 
     return (win / (win + lose)) * 100;
   };
 
   const winRate = getWinRate();
+
+  const onClick = () => setQueueType((prev) => (prev === 'RANKED_SOLO_5x5' ? 'RANKED_FLEX_SR' : 'RANKED_SOLO_5x5'));
 
   return (
     <Box
@@ -52,7 +62,7 @@ export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
             border="1px solid"
           >
             <img
-              src={`http://ddragon.leagueoflegends.com/cdn/12.2.1/img/profileicon/${profileIconId.toString()}.png`}
+              src={getSummonerIconUrl(profileIconId.toString())}
               alt=""
               width={96}
               height={96}
@@ -96,28 +106,31 @@ export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
               overflow="hidden"
             >
               <img
-                src={`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${(profileStats?.tier ?? 'unranked').toLowerCase()}.png`}
+                src={getTierUrl(queue?.tier ?? 'unranked').toLowerCase()}
                 alt=""
                 width={36}
                 height={36}
               />
             </Box>
 
-            <Text.Paragraph variant="body1" sx={{ marginLeft: '8px' }}>{profileStats?.tier ?? 'UNRANKED'} {profileStats?.rank}</Text.Paragraph>
+            <Text.Paragraph variant="body1" sx={{ marginLeft: '8px' }}>{queue?.tier ?? 'UNRANKED'} {queue?.rank}</Text.Paragraph>
 
-            <Text.Paragraph variant="body1" sx={{ marginLeft: '12px' }}>{profileStats?.leaguePoints ?? 0} LP</Text.Paragraph>
+            <Text.Paragraph variant="body1" sx={{ marginLeft: '12px' }}>{queue?.leaguePoints ?? 0} LP</Text.Paragraph>
           </Box>
           <Box
             display="flex"
             marginTop={1}
           >
-            <Box
-              padding={1}
-              backgroundColor="radix.gray7"
-              borderRadius="4px"
+            <Button
+              onClick={() => onClick()}
             >
-              <Text.Paragraph variant="body1">SOLO / DUO</Text.Paragraph>
-            </Box>
+              <Text.Paragraph
+                variant="body1"
+                sx={{ width: 112 }}
+              >
+                {quequqTypes[queueType]}
+              </Text.Paragraph>
+            </Button>
 
             <Box
               marginLeft={3}
@@ -128,9 +141,9 @@ export const SummonerProfileStats = (props: SummonerProfileStatsProps) => {
             >
               <Text.Paragraph variant="body1">RECORD:</Text.Paragraph>
 
-              <Text.Paragraph variant="body1" color="radix.green11" sx={{ marginLeft: '8px' }}>{profileStats?.wins ?? 0}</Text.Paragraph>
+              <Text.Paragraph variant="body1" color="radix.green11" sx={{ marginLeft: '8px' }}>{queue?.wins ?? 0}</Text.Paragraph>
               <Text.Paragraph variant="body1">-</Text.Paragraph>
-              <Text.Paragraph variant="body1" color="radix.red11">{profileStats?.losses ?? 0}</Text.Paragraph>
+              <Text.Paragraph variant="body1" color="radix.red11">{queue?.losses ?? 0}</Text.Paragraph>
 
               <Text.Paragraph variant="body1" sx={{ marginLeft: '12px' }}>WINRATE: </Text.Paragraph>
               <Text.Paragraph variant="body1" color={winRate >= 50 ? 'radix.green11' : 'radix.red11'} sx={{ marginLeft: '8px' }}>{winRate.toFixed(2)} %</Text.Paragraph>

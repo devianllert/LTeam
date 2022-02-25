@@ -16,6 +16,9 @@ import { SummonerSpells } from '../riot/interfaces/summonerSpells.interface';
 import { Rune } from '../riot/interfaces/summonerRunes.interface';
 import { secondRuneType } from './constants/runesType';
 
+import { getChampionImgUrl, getSummonerSpellUrl } from '@/modules/ddragon/path';
+import { getSecondRuneTypeUrl, getPositionUrl, getMainRuneImgUrl } from '@/modules/communityDragon';
+
 export interface MatchProps {
   matchData: MatchDTO;
   summoner: string;
@@ -45,6 +48,11 @@ export const Match = (props: MatchProps) => {
     const KP = (kills / summonerTeam.objectives.champion.kills) * 100;
     return KP;
   };
+  const getSummonerKDA = () => {
+    const kills = summonerData.kills + summonerData.assists;
+    const kda = kills / summonerData.deaths;
+    return kda.toFixed(2);
+  };
 
   const getMatchDuration = () => {
     const minutes = Math.trunc(matchData.info.gameDuration / 60);
@@ -58,26 +66,25 @@ export const Match = (props: MatchProps) => {
   };
 
   const getWardStats = () => {
-    const stealthWards = summonerData.challenges.stealthWardsPlaced;
-    const controlWards = summonerData.challenges.controlWardsPlaced;
-    const wardsDestroied = summonerData.challenges.wardTakedowns;
+    const stealthWards = summonerData.wardsPlaced;
+    const controlWards = summonerData.detectorWardsPlaced;
+    const wardsDestroied = summonerData.wardsKilled;
     return `${stealthWards}/${controlWards}/${wardsDestroied}`;
   };
 
   const spells = Object.keys(summonerSpells.data);
-  const getSummonerSpell = (spellKey: string) => {
+  const getSpell = (spellKey: string) => {
     const summonerSpell = spells.find((spellName) => summonerSpells.data[spellName].key === spellKey);
-    return summonerSpell;
+    return summonerSpell as string;
   };
 
-  const getSummonerMainRuneImg = () => {
-    const summonerRune = summonerRunes.find((rune) => rune.id === runeId);
-    const runePath = summonerRune?.iconPath.trim().split('/').slice(3).join('/') ?? '';
+  // const getSummonerMainRuneImg = () => {
+  //   const summonerRune = summonerRunes.find((rune) => rune.id === runeId);
+  //   const runePath = summonerRune?.iconPath.trim().split('/').slice(3).join('/') ?? '';
 
-    return `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/${runePath.toLocaleLowerCase()}`;
-  };
-
-  const getSummonerSecondRuneType = () => `https://raw.communitydragon.org/12.4/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/${secondRuneType[summonerData.perks.styles[1].style]}.png`;
+  //   return `${path.mainRune}${runePath.toLocaleLowerCase()}`;
+  // };
+  const summonerMainRune = summonerRunes.find((rune) => rune.id === runeId)?.iconPath;
 
   return (
     <Box
@@ -136,7 +143,7 @@ export const Match = (props: MatchProps) => {
                     width={32}
                     height={32}
                     alt=""
-                    src={`https://raw.communitydragon.org/12.3/plugins/rcp-fe-lol-clash/global/default/icon-position-${summonerData.lane.toLocaleLowerCase()}-blue.png`}
+                    src={getPositionUrl(summonerData.lane.toLocaleLowerCase())}
                   />
                 )}
               </Box>
@@ -154,7 +161,7 @@ export const Match = (props: MatchProps) => {
                 width={64}
                 height={64}
                 alt=""
-                src={`https://ddragon.leagueoflegends.com/cdn/12.4.1/img/champion/${summonerData.championName}.png`}
+                src={getChampionImgUrl(summonerData.championName)}
               />
             </Box>
 
@@ -173,12 +180,12 @@ export const Match = (props: MatchProps) => {
                   marginBottom={1}
                   backgroundColor="black"
                 >
-                  {getSummonerSpell(summonerData.summoner1Id.toString()) && (
+                  {summonerData.summoner1Id && (
                     <img
                       alt=""
                       width={28}
                       height={28}
-                      src={`https://ddragon.leagueoflegends.com/cdn/12.4.1/img/spell/${getSummonerSpell(summonerData.summoner1Id.toString())}.png`}
+                      src={getSummonerSpellUrl(getSpell(summonerData.summoner1Id.toString()))}
                     />
                   )}
                 </Box>
@@ -188,12 +195,12 @@ export const Match = (props: MatchProps) => {
                   height={28}
                   backgroundColor="black"
                 >
-                  {getSummonerSpell(summonerData.summoner2Id.toString()) && (
+                  {summonerData.summoner2Id && (
                   <img
                     alt=""
                     width={28}
                     height={28}
-                    src={`https://ddragon.leagueoflegends.com/cdn/12.4.1/img/spell/${getSummonerSpell(summonerData.summoner2Id.toString())}.png`}
+                    src={getSummonerSpellUrl(getSpell(summonerData.summoner2Id.toString()))}
                   />
                   )}
                 </Box>
@@ -208,12 +215,12 @@ export const Match = (props: MatchProps) => {
                   height={28}
                   marginBottom={1}
                 >
-                  {getSummonerMainRuneImg() && (
+                  {summonerMainRune && (
                     <img
                       alt=""
                       width={28}
                       height={28}
-                      src={getSummonerMainRuneImg()}
+                      src={getMainRuneImgUrl(summonerMainRune)}
                     />
                   )}
                 </Box>
@@ -222,12 +229,12 @@ export const Match = (props: MatchProps) => {
                   width={28}
                   height={28}
                 >
-                  {getSummonerSecondRuneType() && (
+                  {secondRuneType[summonerData.perks.styles[1].style] && (
                     <img
                       alt=""
                       width={28}
                       height={28}
-                      src={getSummonerSecondRuneType()}
+                      src={getSecondRuneTypeUrl(secondRuneType[summonerData.perks.styles[1].style] as string)}
                     />
                   )}
                 </Box>
@@ -274,7 +281,7 @@ export const Match = (props: MatchProps) => {
                 textAlign="center"
                 sx={{ width: 80 }}
               >
-                {`${summonerData.challenges.kda.toFixed(2)} KDA`}
+                {`${getSummonerKDA()} KDA`}
               </Text.Paragraph>
             </Box>
 
@@ -293,6 +300,7 @@ export const Match = (props: MatchProps) => {
                 {`${summonerData.totalMinionsKilled} (${(summonerData.totalMinionsKilled / getMatchDuration()).toFixed(1)}) CS`}
               </Text.Paragraph>
 
+              {summonerData.challenges?.laneMinionsFirst10Minutes && (
               <Text.Paragraph
                 variant="body2"
                 textAlign="center"
@@ -300,6 +308,7 @@ export const Match = (props: MatchProps) => {
               >
                 {`${summonerData.challenges.laneMinionsFirst10Minutes} per lane stage`}
               </Text.Paragraph>
+              )}
             </Box>
 
             <Box
@@ -333,7 +342,6 @@ export const Match = (props: MatchProps) => {
         >
           <Participants
             participants={participants}
-            summoner={summonerData.summonerName}
             summonerPosition={summonerPosition}
           />
         </Box>

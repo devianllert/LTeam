@@ -13,6 +13,7 @@ import { getSummonerSpellsData } from '@/modules/riot/api/summonerSpells';
 import { Match } from '../../Match';
 import { SummonerSpells } from '@/modules/riot/interfaces/summonerSpells.interface';
 import { getSummonerRunesData } from '@/modules/riot/api/summonerRunes';
+import { Button } from '@/common/components/system/Button';
 
 export interface MatchListProps {
   puuid: string;
@@ -28,10 +29,14 @@ export const MatchList = (props: MatchListProps): JSX.Element => {
   const { region, summoner } = router.query;
 
   const query = useQuery(['matches', summoner], async () => {
-    const { data } = await axios.get<MatchDTO[]>(`/api/riot/${region as string}/matches/${puuid}`);
-
-    const summonerSpellsData = await getSummonerSpellsData();
-    const summonerRunesData = await getSummonerRunesData();
+    const getSummonerSpellPromise = getSummonerSpellsData();
+    const getSummonerRunesPromise = getSummonerRunesData();
+    const getMatchesPromise = axios.get<MatchDTO[]>(`/api/riot/${region as string}/matches/${puuid}`);
+    const [
+      summonerSpellsData,
+      summonerRunesData,
+      { data },
+    ] = await Promise.all([getSummonerSpellPromise, getSummonerRunesPromise, getMatchesPromise]);
 
     return {
       data,
@@ -44,6 +49,17 @@ export const MatchList = (props: MatchListProps): JSX.Element => {
 
   const matches = query.data?.data ?? [];
   const runesData = query.data?.summonerRunes ?? [];
+
+  const [matchList, setMatchList] = React.useState(matches);
+  const [findAllMatches, setFindAlMatches] = React.useState(false);
+
+  const onClick = async () => {
+    const { data } = await axios.get<MatchDTO[]>(`/api/riot/${region as string}/matches/${puuid}?offset=${matchList.length}`);
+
+    if (data.length < 5) { setFindAlMatches(true); }
+
+    setMatchList((prev) => [...prev, ...data]);
+  };
 
   const hasMatches = matches.length !== 0;
 
@@ -62,7 +78,7 @@ export const MatchList = (props: MatchListProps): JSX.Element => {
           direction="column"
           space={3}
         >
-          {matches.map((matchData) => (
+          {matchList.map((matchData) => (
             <Match
               key={matchData.metadata.matchId}
               matchData={matchData}
@@ -71,6 +87,23 @@ export const MatchList = (props: MatchListProps): JSX.Element => {
               summonerRunes={runesData}
             />
           ))}
+          {!findAllMatches
+            && (
+            <Box
+              width="100%"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              marginTop={4}
+            >
+              <Button
+                onClick={() => onClick()}
+                variant="contained"
+              >
+                <Text.Paragraph variant="body1">Load more</Text.Paragraph>
+              </Button>
+            </Box>
+            )}
         </Stack>
       )}
     </Box>

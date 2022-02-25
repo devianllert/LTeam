@@ -18,6 +18,8 @@ import { RecentSummoner } from '@/modules/summoner/interfaces/summoner.interface
 import { RegionAlias } from '@/modules/summoner/interfaces/region.interface';
 import shadows from '@/common/design/tokens/shadows';
 
+import { getSummonerIconUrl } from '@/modules/ddragon/path';
+
 import * as S from './styled';
 
 interface SummonerItemProps {
@@ -89,7 +91,7 @@ const SummonerItem = (props: SummonerItemProps) => {
           alt="Summoner icon"
           borderRadius="50%"
           mr={2}
-          src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/profileicon/${icon}.png`}
+          src={getSummonerIconUrl(icon.toString())}
         />
 
         <Link href={`/${region}/summoner/${name}`} passHref>

@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Box } from '@/common/components/layout/Box';
+import { getSummonerItemUrl } from '@/modules/ddragon/path';
 
 export interface ItemsTableProps {
   items: number[];
 }
-
-const itemBaseUrl = 'http://ddragon.leagueoflegends.com/cdn/12.4.1/img/item/';
 
 export const ItemsTable = (props: ItemsTableProps) => {
   const {
@@ -33,7 +32,7 @@ export const ItemsTable = (props: ItemsTableProps) => {
             width={32}
             height={32}
             alt=""
-            src={`${itemBaseUrl}${itemId}.png`}
+            src={getSummonerItemUrl(itemId.toString())}
           />
           )}
         </Box>

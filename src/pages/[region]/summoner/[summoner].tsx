@@ -28,6 +28,10 @@ import { getMatches } from '@/modules/riot/api/match';
 import { getSummonerLeagues } from '@/modules/riot/api/league';
 import { MatchList } from '@/modules/match/components/MatchList';
 import { Container } from '@/common/components/layout/Container';
+import { getSummonerSpellsData } from '@/modules/riot/api/summonerSpells';
+import { getSummonerRunesData } from '@/modules/riot/api/summonerRunes';
+import { Button } from '@/common/components/system/Button';
+import * as Text from '@/common/components/system/Text';
 
 const logger = createLogger('Index');
 
@@ -63,12 +67,27 @@ export const getServerSideProps: GetServerSideProps<GetServerSidePageProps> = as
         };
       });
 
-      await queryClient.fetchQuery(['matches', summoner], async () => getMatches({
-        platform: regionToCluster(regionKey),
-        puuid: data.account.puuid,
-        limit: 5,
-        offset: 0,
-      }));
+      await queryClient.fetchQuery(['matches', summoner], async () => {
+        const getSummonerSpellPromise = getSummonerSpellsData();
+        const getSummonerRunesPromise = getSummonerRunesData();
+        const getMatchesPromise = getMatches({
+          platform: regionToCluster(regionKey),
+          puuid: data.account.puuid,
+          limit: 5,
+          offset: 0,
+        });
+        const [
+          summonerSpellsData,
+          summonerRunesData,
+          matches,
+        ] = await Promise.all([getSummonerSpellPromise, getSummonerRunesPromise, getMatchesPromise]);
+
+        return {
+          data: matches,
+          summonerSpellsData,
+          summonerRunes: summonerRunesData,
+        };
+      });
 
       return {
         // Props returned here will be available as page properties (pageProps)
@@ -136,10 +155,11 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
           summonerLevel={query.data?.account.summonerLevel ?? 0}
           profileIconId={query.data?.account.profileIconId ?? 0}
           summonerName={query.data?.account.name ?? ''}
-          profileStats={query.data?.leagues[0]}
+          profileStats={query.data?.leagues}
         />
 
         {query.data?.account.puuid && <MatchList puuid={query.data.account.puuid} />}
+
       </Container>
     </>
   );
