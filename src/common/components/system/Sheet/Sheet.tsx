@@ -6,6 +6,7 @@ import { StyledOverlay } from './SheetOverlay';
 export const Sheet = ({ children, ...props }: DialogPrimitive.DialogProps) => (
   <DialogPrimitive.Root {...props}>
     <StyledOverlay />
+
     {children}
   </DialogPrimitive.Root>
 );

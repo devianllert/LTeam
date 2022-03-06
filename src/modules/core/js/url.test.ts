@@ -1,10 +1,5 @@
 import { GenericObject } from '../data/types/GenericObject';
-import {
-  decodeQueryParameterToJSON,
-  stringifyJSONToQueryParameter,
-  filterExternalAbsoluteUrl,
-  encodeJSONToQueryParameters,
-} from './url';
+import { decodeQueryParameterToJSON, encodeJSONToQueryParameter, filterExternalAbsoluteUrl } from './url';
 
 /**
  * @group unit
@@ -35,9 +30,9 @@ export const encodedData =
   '%7B%22organisation%22%3A%7B%22ref%22%3A%22customer1%22%2C%22logo%22%3A%7B%22linkUrl%22%3Anull%2C%22linkTarget%22%3A%22_blank%22%2C%22classes%22%3Anull%2C%22style%22%3Anull%2C%22mimeType%22%3A%22image%2Fpng%22%2C%22__typename%22%3A%22Asset%22%7D%2C%22theme%22%3A%7B%22primaryColor%22%3A%22%231134e6%22%2C%22primaryAltColor%22%3A%22%23203a51%22%2C%22secondaryColor%22%3A%22white%22%2C%22font%22%3A%22neuzeit-grotesk%22%2C%22__typename%22%3A%22Theme%22%2C%22primaryColorG1%22%3A%22%23ffffff%22%7D%7D%7D';
 
 describe(`utils/js/url.ts`, () => {
-  describe(`stringifyJSONToQueryParameter`, () => {
+  describe(`encodeJSONToQueryParameter`, () => {
     it(`should encode a JS object into a url-compatible string`, async () => {
-      expect(stringifyJSONToQueryParameter(data)).toEqual(encodedData);
+      expect(encodeJSONToQueryParameter(data)).toEqual(encodedData);
     });
   });
 
@@ -52,7 +47,7 @@ describe(`utils/js/url.ts`, () => {
       const _decodedData: GenericObject = decodeQueryParameterToJSON(encodedData);
       expect(_decodedData).toEqual(data);
 
-      const _encodedData: string = stringifyJSONToQueryParameter(_decodedData);
+      const _encodedData: string = encodeJSONToQueryParameter(_decodedData);
       expect(_encodedData).toEqual(encodedData);
 
       const _decodedDataAgain: GenericObject = decodeQueryParameterToJSON(_encodedData);
@@ -77,14 +72,4 @@ describe(`utils/js/url.ts`, () => {
       expect(filterExternalAbsoluteUrl('/google.com?test')).toEqual('/google.com?test');
     });
   });
-
-  describe('encodeJSONToQueryParameters', () => {
-    const data = {
-      limit: 20,
-      offset: 0,
-      topics: ['all', 'news', 'games']
-    };
-
-    expect(encodeJSONToQueryParameters(data)).toEqual('?limit=20&offset=0&topics=all%2Cnews%2Cgames')
-  })
 });

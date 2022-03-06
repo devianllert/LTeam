@@ -4,16 +4,6 @@ import StringifySafe from 'json-stringify-safe';
 import isBrowser from '@/common/utils/isBrowser';
 
 import { GenericObject } from '../data/types/GenericObject';
-import { Primitive } from './types/Primitive';
-
-export const encodeJSONToQueryParameters = (data: GenericObject<Primitive | Array<Primitive>>): string => {
-  // @ts-expect-error URLSearchParams works fine with all primitives and arrays
-  const searchParams = new URLSearchParams(data);
-
-  const stringifiedParams = searchParams.toString();
-
-  return stringifiedParams ? `?${searchParams.toString()}` : '';
-};
 
 /**
  * Converts a JSON object into a string that is url-friendly.
@@ -23,7 +13,7 @@ export const encodeJSONToQueryParameters = (data: GenericObject<Primitive | Arra
  * @param {object} data
  * @return {string}
  */
-export const stringifyJSONToQueryParameter = (data: GenericObject): string => {
+export const encodeJSONToQueryParameter = (data: GenericObject): string => {
   return encodeURIComponent(StringifySafe(data)); // Use StringifySafe to avoid crash on circular dependencies
 };
 
