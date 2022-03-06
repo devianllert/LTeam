@@ -30,7 +30,7 @@ import { MatchList } from '@/modules/match/components/MatchList';
 import { Container } from '@/common/components/layout/Container';
 import { getSummonerSpellsData } from '@/modules/riot/api/summonerSpells';
 import { getSummonerRunesData } from '@/modules/riot/api/summonerRunes';
-import { SummonerInput } from '@/modules/summoner/components/InputSummoner';
+import { SummonerInput } from '@/modules/summoner/components/SummonerInput';
 
 const logger = createLogger('Index');
 
