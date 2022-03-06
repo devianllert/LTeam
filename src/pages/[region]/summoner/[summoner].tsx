@@ -30,8 +30,7 @@ import { MatchList } from '@/modules/match/components/MatchList';
 import { Container } from '@/common/components/layout/Container';
 import { getSummonerSpellsData } from '@/modules/riot/api/summonerSpells';
 import { getSummonerRunesData } from '@/modules/riot/api/summonerRunes';
-import { Button } from '@/common/components/system/Button';
-import * as Text from '@/common/components/system/Text';
+import { SummonerInput } from '@/modules/summoner/components/InputSummoner';
 
 const logger = createLogger('Index');
 
@@ -42,7 +41,7 @@ export const getServerSideProps: GetServerSideProps<GetServerSidePageProps> = as
 ): Promise<GetServerSidePropsResult<GetServerSidePageProps>> => {
   context.res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=600');
 
-  const commonServerSideProps = await getCoreServerSideProps()(context);
+  const commonServerSideProps = await getCoreServerSideProps(['index'])(context);
 
   const region = context.query.region as RegionAlias;
   const summoner = context.query.summoner as string;
@@ -149,6 +148,18 @@ const IndexPage: EnhancedNextPage<Props> = (): JSX.Element => {
       <Head>
         <title>{getAppTitle('Search')}</title>
       </Head>
+
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        position="absolute"
+        top={24}
+        left="calc(50% - 152px)"
+        zIndex={1}
+      >
+        <SummonerInput />
+      </Box>
 
       <Container>
         <SummonerProfileStats
