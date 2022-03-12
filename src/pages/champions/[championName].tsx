@@ -80,7 +80,7 @@ export const IndexPage = ():JSX.Element => {
         championRole="Support"
         rank={5}
         winRate={58.21}
-        championName="Pyke"
+        championName={championName as string}
         championKey={championKey as string}
       />
 
