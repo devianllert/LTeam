@@ -17,5 +17,5 @@ Basic.args = {
   championName: 'Pyke',
   rank: 5,
   winRate: 52.28,
-  championKey: 555,
+  championKey: '555',
 };
