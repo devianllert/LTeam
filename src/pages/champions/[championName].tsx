@@ -6,16 +6,9 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Head from 'next/head';
 import axios from 'axios';
 
-import { OnlyBrowserPageProps } from '@/layouts/core/types/OnlyBrowserPageProps';
-import { SSGPageProps } from '@/layouts/core/types/SSGPageProps';
-import { SSRPageProps } from '@/layouts/core/types/SSRPageProps';
-import { createLogger } from '@/modules/core/logging/logger';
-import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 import { MainLayout } from '@/layouts/main/components/MainLayout';
 import { getAppTitle } from '@/modules/core/meta/meta';
 import { Box } from '@/common/components/layout/Box';
-import { getCoreServerSideProps } from '@/layouts/core/SSR';
-import { REACT_QUERY_STATE_PROP_NAME } from '@/modules/core/rquery/react-query';
 
 import { ChampionBanner } from '@/modules/champions/components/ChampionBanner';
 import { Card } from '@/modules/champions/components/Card';
@@ -23,6 +16,8 @@ import { ChampionStart } from '@/modules/champions/components/ChampionStart';
 
 import { Container } from '@/common/components/layout/Container';
 import { Stack } from '@/common/components/layout/Stack';
+
+import { ChampionParamentrs } from '@/modules/champions/interfaces/champion';
 
 const statsSpells = {
   mostFrequent: {
@@ -68,6 +63,13 @@ export const IndexPage = ():JSX.Element => {
 
   const { championName } = router.query;
 
+  const query = useQuery(['champion', championName], async () => {
+    const { data } = await axios.get<ChampionParamentrs>(`http://ddragon.leagueoflegends.com/cdn/12.5.1/data/en_US/champion/${championName}.json`);
+
+    return data;
+  });
+  const championKey = query.data?.data[championName as string].key;
+
   return (
     <>
       <Head>
@@ -79,7 +81,7 @@ export const IndexPage = ():JSX.Element => {
         rank={5}
         winRate={58.21}
         championName="Pyke"
-        championKey={555}
+        championKey={championKey as string}
       />
 
       <Container>
@@ -110,7 +112,5 @@ export const IndexPage = ():JSX.Element => {
     </>
   );
 };
-
-IndexPage.Layout = MainLayout;
 
 export default IndexPage;

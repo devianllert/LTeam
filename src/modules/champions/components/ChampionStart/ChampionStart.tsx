@@ -47,8 +47,10 @@ export const StatsItem = (props: StatsItemProps): JSX.Element => {
         mb={3}
       >
         <Stack direction="row" space={2}>
-          {data.items.map((item) => (
+          {data.items.map((item, index) => (
             <Box
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
               borderRadius="50%"
               width={32}
               height={32}

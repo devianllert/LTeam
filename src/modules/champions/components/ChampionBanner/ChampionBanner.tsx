@@ -64,7 +64,7 @@ export interface ChampionBannerProps {
    */
   championName: string;
   championRole: string;
-  championKey: number;
+  championKey: string;
   winRate: number;
   rank: number;
 }
