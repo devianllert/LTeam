@@ -16,7 +16,7 @@ Basic.args = {
   stats: {
     mostFrequent: {
       items: [
-        'http://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerFlash.png',
+        'https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerFlash.png',
         'https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerDot.png',
       ],
       games: 11058,
@@ -24,7 +24,7 @@ Basic.args = {
     },
     mostWinRate: {
       items: [
-        'http://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerFlash.png',
+        'https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerFlash.png',
         'https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerTeleport.png',
       ],
       games: 223,

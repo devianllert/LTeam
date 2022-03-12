@@ -22,7 +22,7 @@ import { ChampionParamentrs } from '@/modules/champions/interfaces/champion';
 const statsSpells = {
   mostFrequent: {
     items: [
-      'http://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerFlash.png',
+      'https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerFlash.png',
       'https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerDot.png',
     ],
     games: 11058,
@@ -30,7 +30,7 @@ const statsSpells = {
   },
   mostWinRate: {
     items: [
-      'http://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerFlash.png',
+      'https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerFlash.png',
       'https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/SummonerTeleport.png',
     ],
     games: 223,
@@ -64,7 +64,7 @@ export const IndexPage = ():JSX.Element => {
   const { championName } = router.query;
 
   const query = useQuery(['champion', championName], async () => {
-    const { data } = await axios.get<ChampionParamentrs>(`http://ddragon.leagueoflegends.com/cdn/12.5.1/data/en_US/champion/${championName}.json`);
+    const { data } = await axios.get<ChampionParamentrs>(`https://ddragon.leagueoflegends.com/cdn/12.5.1/data/en_US/champion/${championName}.json`);
 
     return data;
   });
