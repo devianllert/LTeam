@@ -20,6 +20,7 @@ import { Stack } from '@/common/components/layout/Stack';
 import { ChampionParamentrs } from '@/modules/champions/interfaces/champion';
 
 import { capitalize } from '@/modules/core/js/string';
+import { EnhancedNextPage } from '@/layouts/core/types/EnhancedNextPage';
 
 const statsSpells = {
   mostFrequent: {
@@ -60,7 +61,7 @@ const statsItems = {
   },
 };
 
-export const IndexPage = ():JSX.Element => {
+export const ChampionPage: EnhancedNextPage = ():JSX.Element => {
   const router = useRouter();
 
   const { championName } = router.query;
@@ -116,4 +117,6 @@ export const IndexPage = ():JSX.Element => {
   );
 };
 
-export default IndexPage;
+ChampionPage.Layout = MainLayout;
+
+export default ChampionPage;

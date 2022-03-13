@@ -10,7 +10,7 @@ import { paragraphs } from '@/common/design/tokens/typography';
 
 const menuItemCss = (props: { theme: Theme }): CSSObject => ({
   ...paragraphs.body3,
-  fontWeight: 500,
+  fontWeight: 400,
   display: 'flex',
   alignItems: 'center',
   fontVariantNumeric: 'tabular-nums',

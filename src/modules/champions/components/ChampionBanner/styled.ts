@@ -21,7 +21,7 @@ export const ChampionImg = styled.div<ChampionImgProps>(({ theme, ...props }) =>
   '&::before': {
     content: '""',
     width: '100px',
-    background: `linear-gradient(to right, ${theme.colors.background.secondary}, rgba(0, 0, 0, 0))`,
+    background: `linear-gradient(to right, ${theme.colors.background.secondary} 33%, rgba(0, 0, 0, 0))`,
     position: 'absolute',
     height: '100%',
     left: 0,
@@ -30,7 +30,7 @@ export const ChampionImg = styled.div<ChampionImgProps>(({ theme, ...props }) =>
     marginLeft: 'auto',
     content: '""',
     width: '100px',
-    background: `linear-gradient(to left, ${theme.colors.background.secondary}, rgba(0, 0, 0, 0))`,
+    background: `linear-gradient(to left, ${theme.colors.background.secondary} 33%, rgba(0, 0, 0, 0))`,
     height: '100%',
     position: 'absolute',
     right: 0,
