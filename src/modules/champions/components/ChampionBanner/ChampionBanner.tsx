@@ -12,6 +12,7 @@ import {
 import { Box } from '@/components/layout/Box';
 import * as Text from '@/components/system/Text';
 import { Stack } from '@/components/layout/Stack';
+import { Container } from '@/common/components/layout/Container';
 
 import * as S from './styled';
 
@@ -80,67 +81,70 @@ export const ChampionBanner = (props: ChampionBannerProps): JSX.Element => {
 
   return (
     <S.ChampionBannerRoot>
-      <Box
-        display="flex"
-        alignItems="center"
-        height={[256, 144]}
-        backgroundColor="background.secondary"
-        paddingLeft={3}
-      >
-        <Link
-          href="/"
-          passHref
-        >
-          <Box
-            component="a"
-            display={['none', null, 'flex']}
-            alignItems="center"
-            justifyContent="center"
-            width={32}
-            height={32}
-            border="1px solid"
-            borderRadius="4px"
-            mr={6}
-          >
-            <RiArrowLeftSLine size="32px" />
-          </Box>
-        </Link>
-
+      <Container>
         <Box
           display="flex"
-          flexDirection="column"
+          alignItems="center"
+          height={[256, 144]}
+          backgroundColor="background.secondary"
+          paddingLeft={3}
+          width="100%"
         >
-          <Text.Heading variant="h4" component="h1" sx={{ textTransform: 'uppercase' }}>{championName}</Text.Heading>
+          <Link
+            href="/"
+            passHref
+          >
+            <Box
+              component="a"
+              display={['none', null, 'flex']}
+              alignItems="center"
+              justifyContent="center"
+              width={32}
+              height={32}
+              border="1px solid"
+              borderRadius="4px"
+              mr={6}
+            >
+              <RiArrowLeftSLine size="32px" />
+            </Box>
+          </Link>
 
           <Box
-            mt={2}
+            display="flex"
+            flexDirection="column"
           >
-            <Stack
-              direction={['column', 'row']}
-              space={4}
+            <Text.Heading variant="h4" component="h1" sx={{ textTransform: 'uppercase' }}>{championName}</Text.Heading>
+
+            <Box
+              mt={2}
             >
-              <StatsComponent
-                type="role"
-                value={championRole}
-                icon={<RiSwordLine size="16px" color="gold" />}
-              />
+              <Stack
+                direction={['column', 'row']}
+                space={4}
+              >
+                <StatsComponent
+                  type="role"
+                  value={championRole}
+                  icon={<RiSwordLine size="16px" color="gold" />}
+                />
 
-              <StatsComponent
-                type="win ratio"
-                value={`${winRate.toFixed(2)}%`}
-                icon={<RiLineChartLine size="16px" color="gold" />}
-              />
+                <StatsComponent
+                  type="win ratio"
+                  value={`${winRate.toFixed(2)}%`}
+                  icon={<RiLineChartLine size="16px" color="gold" />}
+                />
 
-              <StatsComponent
-                type="role rating"
-                value={`Ranked #${rank}`}
-                icon={<RiStarFill size="16px" color="gold" />}
-              />
-            </Stack>
+                <StatsComponent
+                  type="role rating"
+                  value={`Ranked #${rank}`}
+                  icon={<RiStarFill size="16px" color="gold" />}
+                />
+              </Stack>
+            </Box>
           </Box>
+          <S.ChampionImg imgPath={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-splashes/${championKey}/${championKey}000.jpg`} />
         </Box>
-        <S.ChampionImg imgPath={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-splashes/${championKey}/${championKey}000.jpg`} />
-      </Box>
+      </Container>
     </S.ChampionBannerRoot>
   );
 };

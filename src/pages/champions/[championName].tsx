@@ -19,6 +19,8 @@ import { Stack } from '@/common/components/layout/Stack';
 
 import { ChampionParamentrs } from '@/modules/champions/interfaces/champion';
 
+import { capitalize } from '@/modules/core/js/string';
+
 const statsSpells = {
   mostFrequent: {
     items: [
@@ -62,13 +64,14 @@ export const IndexPage = ():JSX.Element => {
   const router = useRouter();
 
   const { championName } = router.query;
+  const champion = capitalize(championName as string ?? '');
 
-  const query = useQuery(['champion', championName], async () => {
-    const { data } = await axios.get<ChampionParamentrs>(`https://ddragon.leagueoflegends.com/cdn/12.5.1/data/en_US/champion/${championName}.json`);
+  const query = useQuery(['champion', champion], async () => {
+    const { data } = await axios.get<ChampionParamentrs>(`https://ddragon.leagueoflegends.com/cdn/12.5.1/data/en_US/champion/${champion}.json`);
 
     return data;
   });
-  const championKey = query.data?.data[championName as string].key;
+  const championKey = query.data?.data[champion].key;
 
   return (
     <>
@@ -80,7 +83,7 @@ export const IndexPage = ():JSX.Element => {
         championRole="Support"
         rank={5}
         winRate={58.21}
-        championName={championName as string}
+        championName={champion}
         championKey={championKey as string}
       />
 
