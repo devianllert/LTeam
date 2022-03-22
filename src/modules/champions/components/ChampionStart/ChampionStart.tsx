@@ -22,6 +22,7 @@ export interface Stats {
 export interface StatsItemProps {
   header: string;
   data: Stat;
+
 }
 
 export const StatsItem = (props: StatsItemProps): JSX.Element => {

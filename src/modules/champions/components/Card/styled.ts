@@ -12,5 +12,5 @@ export const Content = styled.div({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: 3,
+  padding: 8,
 });

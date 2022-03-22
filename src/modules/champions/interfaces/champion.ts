@@ -1,5 +1,5 @@
 export interface ChampionParamentrs {
-  data: Record<string, { key: string }>,
+  data: Record<string, ChampionData>,
 }
 
 export interface AllChampions {
@@ -10,4 +10,19 @@ export interface ChampionData {
   id: string;
   key: string;
   name: string;
+  passive: {
+    name: string;
+    image: {
+      full: string;
+    }
+  };
+  spells: SpellData[];
+}
+
+export interface SpellData {
+  id: string;
+  name: string;
+  image: {
+    full: string;
+  };
 }

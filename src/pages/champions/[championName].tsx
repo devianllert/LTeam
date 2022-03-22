@@ -13,6 +13,8 @@ import { Box } from '@/common/components/layout/Box';
 import { ChampionBanner } from '@/modules/champions/components/ChampionBanner';
 import { Card } from '@/modules/champions/components/Card';
 import { ChampionStart } from '@/modules/champions/components/ChampionStart';
+import { ChampionSkillLine } from '@/modules/champions/components/ChampionSkillLine';
+import { ChampionSkillsTable } from '@/modules/champions/components/ChampionSkillsTable';
 
 import { Container } from '@/common/components/layout/Container';
 import { Stack } from '@/common/components/layout/Stack';
@@ -89,6 +91,72 @@ export const ChampionPage: EnhancedNextPage = ():JSX.Element => {
       />
 
       <Container>
+        <Box
+          display="flex"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          mt={3}
+          overflowX="auto"
+        >
+          <Card
+            cardHeading="Skill Path"
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+            >
+              <Box
+                my={1}
+              >
+                <ChampionSkillLine
+                  type="Q"
+                  skillName={query.data?.data[champion].spells[0].name ?? ''}
+                  skiillImg={query.data?.data[champion].spells[0].image.full ?? ''}
+                  takenAtLvl={[1, 4, 5, 7, 9]}
+                />
+              </Box>
+              <Box
+                my={2}
+              >
+                <ChampionSkillLine
+                  type="W"
+                  skillName={query.data?.data[champion].spells[1].name ?? ''}
+                  skiillImg={query.data?.data[champion].spells[1].image.full ?? ''}
+                  takenAtLvl={[3, 14, 15, 17, 18]}
+                />
+              </Box>
+              <Box
+                my={2}
+              >
+                <ChampionSkillLine
+                  type="E"
+                  skillName={query.data?.data[champion].spells[2].name ?? ''}
+                  skiillImg={query.data?.data[champion].spells[2].image.full ?? ''}
+                  takenAtLvl={[2, 8, 10, 12, 13]}
+                />
+              </Box>
+              <Box
+                my={2}
+              >
+                <ChampionSkillLine
+                  type="R"
+                  skillName={query.data?.data[champion].spells[3].name ?? ''}
+                  skiillImg={query.data?.data[champion].spells[3].image.full ?? ''}
+                  takenAtLvl={[6, 11, 16]}
+                />
+              </Box>
+              <Box
+                my={2}
+              >
+                <ChampionSkillLine
+                  type="P"
+                  skillName={query.data?.data[champion].passive.name ?? ''}
+                  skiillImg={query.data?.data[champion].passive.image.full ?? ''}
+                />
+              </Box>
+            </Box>
+          </Card>
+        </Box>
 
         <Box
           mt={3}

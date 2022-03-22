@@ -30,6 +30,7 @@ export const ChampionCard = (props: ChampionCardProps): JSX.Element => {
         passHref
       >
         <Box
+          component="a"
           display="flex"
           backgroundSize="cover"
           backgroundPosition="center"
