@@ -13,8 +13,8 @@ import { Box } from '@/common/components/layout/Box';
 import { ChampionBanner } from '@/modules/champions/components/ChampionBanner';
 import { Card } from '@/modules/champions/components/Card';
 import { ChampionStart } from '@/modules/champions/components/ChampionStart';
-import { ChampionSkillLine } from '@/modules/champions/components/ChampionSkillLine';
-import { ChampionSkillsTable } from '@/modules/champions/components/ChampionSkillsTable';
+import { ChampionSkillLine, SpellData } from '@/modules/champions/components/ChampionSkillLine';
+import { ChampionSkillsTable, ChampionSkillsTableProps } from '@/modules/champions/components/ChampionSkillsTable';
 
 import { Container } from '@/common/components/layout/Container';
 import { Stack } from '@/common/components/layout/Stack';
@@ -76,6 +76,38 @@ export const ChampionPage: EnhancedNextPage = ():JSX.Element => {
   });
   const championKey = query.data?.data[champion].key;
 
+  const spells = {
+    q: {
+      type: 'Q',
+      takenAtLvl: [1, 4, 5, 7, 9],
+      skillName: query.data?.data[champion].spells[0].name ?? '',
+      skillImg: query.data?.data[champion].spells[0].image.full ?? '',
+    } as SpellData,
+    w: {
+      type: 'W',
+      takenAtLvl: [3, 14, 15, 17, 18],
+      skillName: query.data?.data[champion].spells[1].name ?? '',
+      skillImg: query.data?.data[champion].spells[1].image.full ?? '',
+    } as SpellData,
+    e: {
+      type: 'E',
+      takenAtLvl: [2, 8, 10, 12, 13],
+      skillName: query.data?.data[champion].spells[2].name ?? '',
+      skillImg: query.data?.data[champion].spells[2].image.full ?? '',
+    } as SpellData,
+    r: {
+      type: 'R',
+      takenAtLvl: [6, 11, 16],
+      skillName: query.data?.data[champion].spells[3].name ?? '',
+      skillImg: query.data?.data[champion].spells[3].image.full ?? '',
+    } as SpellData,
+    p: {
+      type: 'P',
+      skillName: query.data?.data[champion].passive.name ?? '',
+      skillImg: query.data?.data[champion].passive.image.full ?? '',
+    } as SpellData,
+  };
+
   return (
     <>
       <Head>
@@ -92,6 +124,13 @@ export const ChampionPage: EnhancedNextPage = ():JSX.Element => {
 
       <Container>
         <Box
+          mt={3}
+        >
+          <ChampionSkillsTable
+            spells={spells}
+          />
+        </Box>
+        {/* <Box
           display="flex"
           justifyContent="flex-start"
           alignItems="flex-start"
@@ -156,7 +195,7 @@ export const ChampionPage: EnhancedNextPage = ():JSX.Element => {
               </Box>
             </Box>
           </Card>
-        </Box>
+        </Box> */}
 
         <Box
           mt={3}

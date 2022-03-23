@@ -2,31 +2,38 @@ import * as React from 'react';
 
 import { Box } from '@/components/layout/Box';
 import * as Text from '@/components/system/Text';
-import { Stack } from '@/components/layout/Stack';
 
 import * as S from './styled';
 
 const levels = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
+export interface SpellData {
+  type: 'Q' | 'W' | 'E' | 'R' | 'P';
+  takenAtLvl?: number[];
+  skillName: string;
+  skillImg: string;
+}
+
 export interface ChampionSkillLineProps {
   /**
    * The content
    */
-  type: 'Q' | 'W' | 'E' | 'R' | 'P';
-  takenAtLvl?: number[];
-  skillName: string;
-  skiillImg: string;
+  spell: SpellData
 }
 
 export const ChampionSkillLine = (props: ChampionSkillLineProps): JSX.Element => {
   const {
-    type,
-    takenAtLvl: onLvlTaked,
-    skillName,
-    skiillImg,
+    spell,
   } = props;
 
-  const getImg = (partofPath) => (type === 'P' ? `https://ddragon.leagueoflegends.com/cdn/12.5.1/img/passive/${partofPath}` : `https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/${skiillImg}`);
+  const {
+    type,
+    takenAtLvl,
+    skillImg,
+    skillName,
+  } = spell;
+
+  const getImg = () => (type === 'P' ? `https://ddragon.leagueoflegends.com/cdn/12.5.1/img/passive/${skillImg}` : `https://ddragon.leagueoflegends.com/cdn/12.5.1/img/spell/${skillImg}`);
 
   return (
     <S.ChampionSkillLineRoot>
@@ -49,7 +56,7 @@ export const ChampionSkillLine = (props: ChampionSkillLineProps): JSX.Element =>
             backgroundSize="cover"
             width={48}
             height={48}
-            backgroundImage={`url(${getImg(skiillImg)})`}
+            backgroundImage={`url(${getImg()})`}
           >
             <Box
               position="absolute"
@@ -69,25 +76,25 @@ export const ChampionSkillLine = (props: ChampionSkillLineProps): JSX.Element =>
 
           <Text.Paragraph variant="body1" sx={{ marginLeft: 3 }}>{skillName}</Text.Paragraph>
         </Box>
-        {onLvlTaked && levels.map((level) => (
+        {takenAtLvl && levels.map((level) => (
           <Box
             mx={1}
             key={level}
-            backgroundColor="background.secondary"
+            backgroundColor={takenAtLvl.includes(level) ? 'radix.primary9' : 'background.secondary'}
             display="flex"
             alignItems="center"
             justifyContent="center"
             width={48}
             height={48}
             borderRadius="4px"
-            border={onLvlTaked.includes(level) ? '1px solid' : 'none'}
-            borderColor="radix.yellow9"
+            // border={takenAtLvl.includes(level) ? '1px solid' : 'none'}
+            // borderColor="radix.primary9"
           >
-            {onLvlTaked.includes(level) && <Text.Paragraph variant="body2">{level}</Text.Paragraph>}
+            {takenAtLvl.includes(level) && <Text.Paragraph variant="body2" color="white">{level}</Text.Paragraph>}
           </Box>
         ))}
 
-        {!onLvlTaked && <Box backgroundColor="background.secondary" width={948} height={48} />}
+        {!takenAtLvl && <Box backgroundColor="background.secondary" width={948} height={48} mx={1} />}
       </Box>
     </S.ChampionSkillLineRoot>
   );

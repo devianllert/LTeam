@@ -13,24 +13,35 @@ const Template: Story<ChampionSkillsTableProps> = (args) => <ChampionSkillsTable
 export const Basic = Template.bind({});
 
 Basic.args = {
-  q: {
-    skillName: 'Flair',
-    skiillImg: 'SamiraQ.png',
-  },
-  w: {
-    skillName: 'Blade Whirl',
-    skiillImg: 'SamiraW.png',
-  },
-  e: {
-    skillName: 'Wild Rush',
-    skiillImg: 'SamiraE.png',
-  },
-  r: {
-    skillName: 'Inferno Trigger',
-    skiillImg: 'SamiraR.png',
-  },
-  p: {
-    skillName: 'Daredevil Impulse',
-    skiillImg: 'SamiraP.Samira.png',
+  spells: {
+    q: {
+      type: 'Q',
+      takenAtLvl: [1, 4, 5, 7, 9],
+      skillName: 'Flair',
+      skillImg: 'SamiraQ.png',
+    },
+    w: {
+      type: 'W',
+      takenAtLvl: [3, 14, 15, 17, 18],
+      skillName: 'Blade Whirl',
+      skillImg: 'SamiraW.png',
+    },
+    e: {
+      type: 'E',
+      takenAtLvl: [2, 8, 10, 12, 13],
+      skillName: 'Wild Rush',
+      skillImg: 'SamiraE.png',
+    },
+    r: {
+      type: 'R',
+      takenAtLvl: [6, 11, 16],
+      skillName: 'Inferno Trigger',
+      skillImg: 'SamiraR.png',
+    },
+    p: {
+      type: 'P',
+      skillName: 'Daredevil Impulse',
+      skillImg: 'SamiraP.Samira.png',
+    },
   },
 };
